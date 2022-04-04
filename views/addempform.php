@@ -8,24 +8,20 @@
         <label for="name-input" class="col-form-label">Name</label>
         <input class="form-control" type="text" placeholder="Enter name here" id="name-input" />
     </div>
-    <div class="mb-3">
-        <label for="email-input" class="col-form-label">Email</label>
-        <input class="form-control" type="email" placeholder="john@example.com" id="email-input" />
-    </div>
     <div class="mb-3 row">
+        <div class="col-12 col-md-6">
+            <label for="email-input" class="col-form-label">Email</label>
+            <input class="form-control" type="email" placeholder="john@example.com" id="email-input" />
+        </div>
         <div class="col-12 col-md-6">
             <label for="phone-input" class="col-form-label">Phone</label>
             <input class="form-control" type="tel" placeholder="90-(164)-188-556" id="phone-input" />
-        </div>
-        <div class="col-12 col-md-6">
-            <label for="alt-phone-input" class="col-md-2 col-form-label">Alt Phone</label>
-            <input class="form-control" type="tel" placeholder="90-(164)-188-556" id="alt-phone-input" />
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="dob-input" class="col-form-label">Date Of Birth</label>
-            <input class="form-control" type="date" value="2021-06-18" id="dob-input" />
+            <input class="form-control" type="date" value="" id="dob-input" />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Gender</label>
@@ -64,16 +60,6 @@
         </div>
         <div class="col-12 col-md-6">
             <select class="select2 form-control" data-allow-clear="true">
-                <option value="AK">Alaska</option>
-                <option value="HI">Hawaii</option>
-                <option value="CA">California</option>
-                <option value="NV">Nevada</option>
-                <option value="OR">Oregon</option>
-                <option value="WA">Washington</option>
-                <option value="AZ">Arizona</option>
-                <option value="CO">Colorado</option>
-                <option value="ID">Idaho</option>
-                <option value="MT">Montana</option>
                 <option value="NE">Nebraska</option>
                 <option value="NM">New Mexico</option>
                 <option value="ND">North Dakota</option>
@@ -141,12 +127,12 @@
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
-            <label for="salary-input" class="col-form-label">Cost to Company (in Rs.)</label>
-            <input class="form-control" type="number" min="0" step="1" value="500000" id="salary-input" />
+            <label for="salary-input" class="col-form-label">Basic Salary (in Rs.)</label>
+            <input class="form-control" type="number" min="0" step="0.01" placeholder="500000" id="salary-input" />
         </div>
         <div class="col-12 col-md-6">
             <label for="date-input" class="col-form-label">Date Of Joining</label>
-            <input class="form-control" type="date" value="2021-06-18" id="date-input" />
+            <input class="form-control" type="date" value="" id="date-input" />
         </div>
     </div>
     <div class="d-flex flex-row-reverse">

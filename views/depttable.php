@@ -1,3 +1,12 @@
+<?php
+require_once "../models/departments.php";
+require_once "../config/dbconfig.php";
+
+$deptModel = new DeptModel($conn);
+
+$rows = $deptModel->findAll();
+?>
+
 <h2 class="ps-2">All Departments</h2>
 <hr>
 <!-- table-responsive -->
@@ -6,7 +15,6 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>id</th>
         <th class="text-start">Name</th>
         <th>Established</th>
         <th>Status</th>
@@ -15,30 +23,21 @@
     </thead>
     <tbody>
       <?php
-        $count = 1;
-        $rows = [
-          array(
-            'id' => 1,
-            'name' => 'asdadasd',
-            'created_at' => '12/12/12',
-            'status' => 'active',
-          )
-        ];
+      $count = 1;
+      $currentDate = Date("Y-m-d");
       ?>
-      <?php foreach($rows as $row): ?>
+      <?php foreach ($rows as $row) : ?>
       <tr>
-        <td><?= $count ?></td>
-        <td><?= $row['id'] ?></td>
-        <td class="text-start"><?= $row['name'] ?></td>
-        <td><?= $row['created_at'] ?></td>
+        <td><?= $count++ ?></td>
+        <td class="text-start"><?= $row['Name'] ?></td>
+        <td><?= substr($row['CreatedAt'], 0, 10) ?></td>
         <td>
-          <?php if($row['status'] === 'active'): ?>
-          <span class="badge bg-label-primary me-1">Active</span></td>
+          <?php if ($row['DeletedAt'] == null) : ?>
+          <span class="badge bg-label-primary me-1">Active</span>
+          <?php else : ?>
+          <span class="badge bg-label-secondary me-1">Terminated</span>
+          <?php endif ?>
         </td>
-        <?php else: ?>
-        <span class="badge bg-label-secondary me-1">Terminated</span></td>
-        </td>
-        <?php endif ?>
         <td>
           <div class="action-btn dropdown dropstart">
             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
@@ -50,7 +49,7 @@
           </div>
         </td>
       </tr>
-      <?php endforeach;?>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>

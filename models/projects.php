@@ -1,8 +1,8 @@
 <?php
-class DeptModel {
+class ProjectModel {
     public $conn;
 
-    private $table = "department";
+    private $table = "project";
 
     public function __construct($connector) {
         $this->conn = $connector;

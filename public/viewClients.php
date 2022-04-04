@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - View Projects</title>
+    <title>Dashboard - View Clients</title>
 
     <meta name="description" content="Employee management system" />
 
@@ -66,7 +66,16 @@
 
     <!-- Custom CSS
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" /> -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" /> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <style>
+      .action-btn {
+        visibility: hidden;
+      }
+      tr:hover .action-btn {
+        visibility: visible;
+      }
+    </style>
+
   </head>
 
   <body>
@@ -85,7 +94,7 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
-                <?php require_once "../views/projecttable.php" ?>
+                <?php require_once "../views/clienttable.php" ?>
             </div>
             <!-- / Content -->
 
@@ -131,7 +140,7 @@
     
     <script>
         $(document).ready(function () {
-            $('#projecttable').DataTable({});
+            $('#clienttable').DataTable({});
         });
     </script>
 </html>

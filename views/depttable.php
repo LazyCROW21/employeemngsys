@@ -24,7 +24,7 @@ $rows = $deptModel->findAll();
     <tbody>
       <?php
       $count = 1;
-      $currentDate = Date("Y-m-d");
+      $currentDate = Date('Y-m-d');
       ?>
       <?php foreach ($rows as $row) : ?>
       <tr>

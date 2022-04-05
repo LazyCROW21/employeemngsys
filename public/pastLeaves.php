@@ -77,6 +77,12 @@
         .select2-search--dropdown .select2-search__field {
         width: 98%;
         }
+        .action-btn {
+          visibility: hidden;
+        }
+        tr:hover .action-btn {
+          visibility: visible;
+        }
     </style>
   </head>
 

@@ -66,7 +66,16 @@
 
     <!-- Custom CSS
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" /> -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" /> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+        <!-- Custom CSS -->
+        <style>
+      .action-btn {
+        visibility: hidden;
+      }
+      tr:hover .action-btn {
+        visibility: visible;
+      }
+    </style> 
   </head>
 
   <body>

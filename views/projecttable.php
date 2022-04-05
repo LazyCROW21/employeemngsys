@@ -1,10 +1,10 @@
 <?php
-  require_once "../models/projects.php";
-  require_once "../config/dbconfig.php";
+require_once "../models/projects.php";
+require_once "../config/dbconfig.php";
 
-  $deptModel = new ProjectModel($conn);
+$projModel = new ProjectModel($conn);
 
-  $rows = $deptModel->findAll();
+$rows = $projModel->findAll();
 ?>
 
 <h2 class="ps-2">All Projects</h2>
@@ -25,43 +25,39 @@
         </thead>
         <tbody>
             <?php
-        $count = 1;
-        $currentDate = Date("Y-m-d");
-      ?>
-            <?php foreach($rows as $row): ?>
-            <tr>
-                <td><?= $count++ ?></td>
-                <td class="text-start"><?= $row['Title'] ?></td>
-                <td class="text-start"><?= $row['Client'] ?></td>
-                <td class="text-start"><?= $row['Lead'] ?></td>
-                <td><?= substr($row['Deadline'], 0, 10) ?></td>
-                <td>
-                    <?php if($row['Completed']): ?>
-                    <span class="badge bg-label-success me-1">Completed</span>
-                    <?php elseif($currentDate < $row['StartedAt']): ?>
-                    <span class="badge bg-label-secondary me-1">Scheduled</span>
-                    <?php elseif($currentDate > $row['Deadline']): ?>
-                    <span class="badge bg-label-danger me-1">Late</span>
-                    <?php else: ?>
-                    <span class="badge bg-label-primary me-1">Active</span>
-                    <?php endif ?>
-                </td>
-                <td>
-                    <div class="action-btn dropdown dropstart">
-                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
-                                class="bx bx-dots-vertical-rounded"></i></button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                    class="bx bx-detail me-2"></i>Details</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                    class="bx bx-edit-alt me-2"></i>Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                    class="bx bx-trash me-2"></i>Delete</a>
+            $count = 1;
+            $currentDate = Date('Y-m-d');
+            ?>
+            <?php foreach ($rows as $row) : ?>
+                <tr>
+                    <td><?= $count++ ?></td>
+                    <td class="text-start"><?= $row['Title'] ?></td>
+                    <td class="text-start"><?= $row['Client'] ?></td>
+                    <td class="text-start"><?= $row['Lead'] ?></td>
+                    <td><?= substr($row['Deadline'], 0, 10) ?></td>
+                    <td>
+                        <?php if ($row['Completed']) : ?>
+                            <span class="badge bg-label-success me-1">Completed</span>
+                        <?php elseif ($currentDate < $row['StartedAt']) : ?>
+                            <span class="badge bg-label-secondary me-1">Scheduled</span>
+                        <?php elseif ($currentDate > $row['Deadline']) : ?>
+                            <span class="badge bg-label-danger me-1">Late</span>
+                        <?php else : ?>
+                            <span class="badge bg-label-primary me-1">Active</span>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <div class="action-btn dropdown dropstart">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-detail me-2"></i>Details</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i>Edit</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i>Delete</a>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <?php endforeach;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>

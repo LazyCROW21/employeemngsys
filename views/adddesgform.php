@@ -31,7 +31,7 @@ if (isset($_POST['submitDesg'])) {
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 col-md-6 align-self-center">
-    <?php if($desgAdded): ?>
+        <?php if($desgAdded): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             Designation added succesfully!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

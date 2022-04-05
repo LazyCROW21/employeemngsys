@@ -6,9 +6,22 @@ class UserModel {
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
         [ 'name' => 'Name', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Email', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Phone', 'type' => 's', 'required' => true ],
+        [ 'name' => 'DateOfBirth', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Gender', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Address', 'type' => 's', 'required' => true ],
+        [ 'name' => 'City', 'type' => 's', 'required' => true ],
+        [ 'name' => 'State', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Basic', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'DateOfJoining', 'type' => 's', 'required' => true ],
         [ 'name' => 'DepartmentId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'DesignationId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'PAN', 'type' => 's', 'required' => true ],
+        [ 'name' => 'BAN', 'type' => 's', 'required' => true ],
     ];
     
+    private $createdBy = [ 'name' => 'CreatedBy', 'type' => 'i', 'required' => true ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -43,6 +56,13 @@ class UserModel {
             }
         }
         
+        if($this->createdBy) {
+            $columnList .= $this->createdBy['name'].',';
+            $params .= '?,';
+            $paramType .= $this->createdAt['type'];
+            array_push($insertData, 1);
+        }
+
         if($this->createdAt) {
             $columnList .= $this->createdAt['name'].',';
             $params .= '?,';

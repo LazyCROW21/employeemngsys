@@ -13,15 +13,23 @@ $designations = $desgModel->findAll();
 
 $states = ['Andaman and Nicobar', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', ' Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka    ', 'Kerala', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Orissa', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
-if (isset($_POST['submitDesg'])) {
+if (isset($_POST['submitUser'])) {
     if(
-        !isset($_POST['Name'])
+        !isset($_POST['Name']) || !isset($_POST['Email']) ||
+        !isset($_POST['Phone']) || !isset($_POST['DateOfBirth']) ||
+        !isset($_POST['Gender']) || !isset($_POST['AddressL1']) ||
+        !isset($_POST['AddressL2']) || !isset($_POST['City']) ||
+        !isset($_POST['State']) || !isset($_POST['DepartmentId']) ||
+        !isset($_POST['DesignationId']) || !isset($_POST['PAN']) ||
+        !isset($_POST['BAN']) || !isset($_POST['Basic']) || !isset($_POST['DateOfJoining'])
     ) {
         exit("invalid input");
     }
-
+    $_POST['Address'] = $_POST['AddressL1'].', '. $_POST['AddressL2'];
+    unset($_POST['AddressL1']);
+    unset($_POST['AddressL2']);
     $userModel = new UserModel($conn);
-    $result = $desgModel->insert($_POST);
+    $result = $userModel->insert($_POST);
     if($result == 'success'){
         $userAdded = true;
     } 
@@ -35,7 +43,23 @@ if (isset($_POST['submitDesg'])) {
 ?>
 <h2 class="ps-2">Add Staff</h2>
 <hr>
-<form class="border rounded p-2 border-light">
+<?php if($userAdded): ?>
+<div class="alert alert-success alert-dismissible" role="alert">
+    User added succesfully!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php elseif($duplicate): ?>
+<div class="alert alert-warning alert-dismissible" role="alert">
+    User not added, duplicate entry!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php elseif($error): ?>
+<div class="alert alert-danger alert-dismissible" role="alert">
+    User cannot be added due to some error/invalid entry!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php endif; ?>
+<form class="border rounded p-2 border-light" method="POST">
     <div class="divider">
         <div class="divider-text">Personal Details</div>
     </div>
@@ -108,7 +132,8 @@ if (isset($_POST['submitDesg'])) {
             </select>
         </div>
         <div class="col-12 col-md-6">
-            <select id="desg-select" class="select2 form-control" data-allow-clear="true"></select>
+            <select id="desg-select" class="select2 form-control" 
+            name="DesignationId" data-allow-clear="true"></select>
         </div>
     </div>
     <div class="mb-3 row">

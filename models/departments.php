@@ -31,7 +31,7 @@ class DeptModel {
             $columnList .= $column['name'].',';
             $params .= '?,';
             $paramType .= $column['type'];
-            if(isset($data[$column['name']])) {
+            if(isset($data[$column['name']]) && $data[$column['name']] !== '') {
                 array_push($insertData, $data[$column['name']]);
             } else {
                 if($column['required']) {

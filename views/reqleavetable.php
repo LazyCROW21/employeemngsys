@@ -4,7 +4,7 @@ require_once "../config/dbconfig.php";
 
 $leaveModel = new LeaveModel($conn);
 
-$rows = $leaveModel->findAll();
+$rows = $leaveModel->findPendingLeaves();
 ?>
 
 <h2 class="ps-2">New Leave Requests</h2>
@@ -30,7 +30,7 @@ $rows = $leaveModel->findAll();
       <?php foreach ($rows as $row) : ?>
         <tr>
           <td><?= $count++ ?></td>
-          <td class="text-start"><?= $row['EmployeeId'] ?></td>
+          <td class="text-start"><?= $row['UserId'] ?></td>
           <td class="text-start"><?= $row['LeaveType'] ?></td>
           <td class="text-start"><?= $row['EffectOnPay'] ?></td>
           <td><?= substr($row['StartedAt'], 0, 10) ?></td>

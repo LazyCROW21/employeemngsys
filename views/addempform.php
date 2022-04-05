@@ -1,3 +1,38 @@
+<?php
+require_once "../models/departments.php";
+require_once "../models/designations.php";
+require_once "../models/users.php";
+require_once "../config/dbconfig.php";
+$userAdded = false;
+$duplicate = false;
+$error = false;
+$deptModel = new DeptModel($conn);
+$desgModel = new DesgModel($conn);
+$departments = $deptModel->findAll();
+$designations = $desgModel->findAll();
+
+$states = ['Andaman and Nicobar', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', ' Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka    ', 'Kerala', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Orissa', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
+
+if (isset($_POST['submitDesg'])) {
+    if(
+        !isset($_POST['Name'])
+    ) {
+        exit("invalid input");
+    }
+
+    $userModel = new UserModel($conn);
+    $result = $desgModel->insert($_POST);
+    if($result == 'success'){
+        $userAdded = true;
+    } 
+    elseif($result == 'duplicate') {
+        $duplicate = true;
+    }
+    else {
+        $error = true;
+    }
+}
+?>
 <h2 class="ps-2">Add Staff</h2>
 <hr>
 <form class="border rounded p-2 border-light">
@@ -6,43 +41,37 @@
     </div>
     <div class="mb-3">
         <label for="name-input" class="col-form-label">Name</label>
-        <input class="form-control" type="text" placeholder="Enter name here" id="name-input" />
+        <input name="Name" class="form-control" type="text" placeholder="Enter name here" id="name-input" maxlength="50" required/>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="email-input" class="col-form-label">Email</label>
-            <input class="form-control" type="email" placeholder="john@example.com" id="email-input" />
+            <input name="Email" class="form-control" type="email" placeholder="john@example.com" id="email-input" required/>
         </div>
         <div class="col-12 col-md-6">
             <label for="phone-input" class="col-form-label">Phone</label>
-            <input class="form-control" type="tel" placeholder="90-(164)-188-556" id="phone-input" />
+            <input name="Phone" class="form-control" type="text" pattern="^\d{10}" id="phone-input" maxlength="10" required/>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="dob-input" class="col-form-label">Date Of Birth</label>
-            <input class="form-control" type="date" value="" id="dob-input" />
+            <input name="DateOfBirth" class="form-control" type="date" value="" id="dob-input" required/>
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Gender</label>
             <br />
             <div class="form-check form-check-inline">
-                <input name="gender" class="form-check-input" type="radio" value="M" id="genderMale" />
-                <label class="form-check-label" for="genderMale">
-                    Male
-                </label>
+                <input name="Gender" class="form-check-input" type="radio" value="M" id="genderMale" required/>
+                <label class="form-check-label" for="genderMale">Male</label>
             </div>
             <div class="form-check form-check-inline">
-                <input name="gender" class="form-check-input" type="radio" value="F" id="genderFemale" />
-                <label class="form-check-label" for="genderFemale">
-                    Female
-                </label>
+                <input name="Gender" class="form-check-input" type="radio" value="F" id="genderFemale" required/>
+                <label class="form-check-label" for="genderFemale">Female</label>
             </div>
             <div class="form-check form-check-inline">
-                <input name="gender" class="form-check-input" type="radio" value="O" id="genderOther" />
-                <label class="form-check-label" for="genderOther">
-                    Other
-                </label>
+                <input name="Gender" class="form-check-input" type="radio" value="O" id="genderOther" required/>
+                <label class="form-check-label" for="genderOther">Other</label>
             </div>
         </div>
 
@@ -50,56 +79,19 @@
     <div class="mb-3 row">
         <label class="col-12 col-form-label">Permanent Address</label>
         <div class="col-12 col-md-6 mb-3">
-            <input class="form-control" type="text" placeholder="Address Line 1" />
+            <input name="AddressL1" class="form-control" type="text" placeholder="Address Line 1" maxlength="255" required />
         </div>
         <div class="col-12 col-md-6 mb-3">
-            <input class="form-control" type="text" placeholder="Address Line 2" />
+            <input name="AddressL2" class="form-control" type="text" placeholder="Address Line 2" maxlength="255" required />
         </div>
         <div class="col-12 col-md-6">
-            <input class="form-control" type="text" placeholder="City" />
+            <input name="City" class="form-control" type="text" maxlength="50" placeholder="City" required/>
         </div>
         <div class="col-12 col-md-6">
-            <select class="select2 form-control" data-allow-clear="true">
-                <option value="NE">Nebraska</option>
-                <option value="NM">New Mexico</option>
-                <option value="ND">North Dakota</option>
-                <option value="UT">Utah</option>
-                <option value="WY">Wyoming</option>
-                <option value="AL">Alabama</option>
-                <option value="AR">Arkansas</option>
-                <option value="IL">Illinois</option>
-                <option value="IA">Iowa</option>
-                <option value="KS">Kansas</option>
-                <option value="KY">Kentucky</option>
-                <option value="LA">Louisiana</option>
-                <option value="MN">Minnesota</option>
-                <option value="MS">Mississippi</option>
-                <option value="MO">Missouri</option>
-                <option value="OK">Oklahoma</option>
-                <option value="SD">South Dakota</option>
-                <option value="TX">Texas</option>
-                <option value="TN">Tennessee</option>
-                <option value="WI">Wisconsin</option>
-                <option value="CT">Connecticut</option>
-                <option value="DE">Delaware</option>
-                <option value="FL">Florida</option>
-                <option value="GA">Georgia</option>
-                <option value="IN">Indiana</option>
-                <option value="ME">Maine</option>
-                <option value="MD">Maryland</option>
-                <option value="MA">Massachusetts</option>
-                <option value="MI">Michigan</option>
-                <option value="NH">New Hampshire</option>
-                <option value="NJ">New Jersey</option>
-                <option value="NY">New York</option>
-                <option value="NC">North Carolina</option>
-                <option value="OH">Ohio</option>
-                <option value="PA">Pennsylvania</option>
-                <option value="RI">Rhode Island</option>
-                <option value="SC">South Carolina</option>
-                <option value="VT">Vermont</option>
-                <option value="VA">Virginia</option>
-                <option value="WV">West Virginia</option>
+            <select name="State" class="select2 form-control" data-allow-clear="true" required>
+            <?php foreach($states as $state): ?>
+                <option value="<?= $state ?>"><?= $state ?></option>
+            <?php endforeach; ?>
             </select>
         </div>
     </div>
@@ -109,34 +101,57 @@
     <div class="mb-3 row">
         <label class="col-12 col-form-label">Position</label>
         <div class="col-12 col-md-6 mb-3">
-            <select class="select2 form-control" data-allow-clear="true">
-                <option value="RI">Department 1</option>
-                <option value="RI">Department 2</option>
-                <option value="RI">Department 3</option>
-                <option value="RI">Department 4</option>
+            <select id="dept-select" name="DepartmentId" class="select2 form-control" data-allow-clear="true" oninput="setDesg()">
+            <?php foreach($departments as $department): ?>
+                <option value="<?= $department['Id'] ?>"><?= $department['Name'] ?></option>
+            <?php endforeach; ?>
             </select>
         </div>
         <div class="col-12 col-md-6">
-            <select class="select2 form-control" data-allow-clear="true">
-                <option value="RI">Desg 1</option>
-                <option value="RI">Desg 2</option>
-                <option value="RI">Desg 3</option>
-                <option value="RI">Desg 4</option>
-            </select>
+            <select id="desg-select" class="select2 form-control" data-allow-clear="true"></select>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col-12 col-md-6">
+            <label for="pan-input" class="col-form-label">PAN</label>
+            <input name="PAN" class="form-control" type="text" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" placeholder="Enter PAN" id="pan-input" required/>
+        </div>
+        <div class="col-12 col-md-6">
+            <label for="bank-input" class="col-form-label">Bank Acount Number</label>
+            <input name="BAN" class="form-control" type="text" maxlength="18" pattern="^\d{9,18}$" placeholder="Enter bank Acc number" id="bank-input" required/>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="salary-input" class="col-form-label">Basic Salary (in Rs.)</label>
-            <input class="form-control" type="number" min="0" step="0.01" placeholder="500000" id="salary-input" />
+            <input name="Basic" class="form-control" type="number" min="0" step="0.01" placeholder="500000" id="salary-input" required />
         </div>
         <div class="col-12 col-md-6">
             <label for="date-input" class="col-form-label">Date Of Joining</label>
-            <input class="form-control" type="date" value="" id="date-input" />
+            <input name="DateOfJoining" class="form-control" type="date" value="" id="date-input" required />
         </div>
     </div>
     <div class="d-flex flex-row-reverse">
-        <button type="button" class="btn rounded-pill me-2 btn-primary">Submit</button>
+        <button type="submit" name="submitUser" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>
     </div>
-
 </form>
+
+<script>
+    var designations = [
+    <?php foreach($designations as $designation): ?>
+    { id:<?= $designation['Id'] ?>, deptId: '<?= $designation['DepartmentId'] ?>', name: '<?= $designation['Name'] ?>'},
+    <?php endforeach; ?>
+];
+
+function setDesg() {
+    let deptSelect = document.getElementById('dept-select');
+    let desgSelect = document.getElementById('desg-select');
+    desgSelect.value = '';
+    desgSelect.innerHTML = '';
+    for(let i=0; i<designations.length; i++) {
+        if(designations[i].deptId == deptSelect.value) {
+            desgSelect.innerHTML += `<option value="${designations[i].id}">${designations[i].name}</option>`
+        }
+    }
+}
+</script>

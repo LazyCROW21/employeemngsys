@@ -14,6 +14,7 @@ class ClientModel {
         [ 'name' => 'Country', 'type' => 's', 'required' => true ]
     ];
     
+    private $createdBy = [ 'name' => 'CreatedBy', 'type' => 'i', 'required' => false ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -47,7 +48,13 @@ class ClientModel {
                 }
             }
         }
-        
+
+        if($this->createdBy) {
+            $columnList .= $this->createdBy['name'].',';
+            $params .= '?,';
+            $paramType .= $this->createdBy['type'];
+            array_push($insertData, 1);
+        }
         if($this->createdAt) {
             $columnList .= $this->createdAt['name'].',';
             $params .= '?,';

@@ -32,8 +32,8 @@ $rows = $projModel->findAll();
                 <tr>
                     <td><?= $count++ ?></td>
                     <td class="text-start"><?= $row['Title'] ?></td>
-                    <td class="text-start"><?= $row['Client'] ?></td>
-                    <td class="text-start"><?= $row['Lead'] ?></td>
+                    <td class="text-start"><?= $row['ClientId'] ?></td>
+                    <td class="text-start"><?= $row['LeadId'] ?></td>
                     <td><?= substr($row['Deadline'], 0, 10) ?></td>
                     <td>
                         <?php if ($row['Completed']) : ?>

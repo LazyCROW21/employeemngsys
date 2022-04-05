@@ -41,7 +41,7 @@ class ClientModel {
                 array_push($insertData, $data[$column['name']]);
             } else {
                 if($column['required']) {
-                    return false;
+                    return 'invalid';
                 } else {
                     array_push($insertData, null);
                 }
@@ -70,12 +70,21 @@ class ClientModel {
         $columnList[strlen($columnList)-1] = ')';
         $params[strlen($params)-1] = ')';
         $query = "INSERT INTO {$this->table} $columnList VALUES $params";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bind_param($paramType, ...$insertData);
-
-        $stmt->execute();
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param($paramType, ...$insertData);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
+        }
         $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'success';
     }
 };

@@ -2,6 +2,8 @@
 require_once "../models/clients.php";
 require_once "../config/dbconfig.php";
 $clientAdded = false;
+$duplicate = false;
+$error = false;
 if (isset($_POST['submitClient'])) {
     if(
         !isset($_POST['Name']) || !isset($_POST['Email']) ||
@@ -11,8 +13,16 @@ if (isset($_POST['submitClient'])) {
         exit("invalid input");
     }
     $clientModel = new ClientModel($conn);
-    $clientModel->insert($_POST);
-    $clientAdded = true;
+    $result = $clientModel->insert($_POST);
+    if($result == 'success'){
+        $clientAdded = true;
+    } 
+    elseif($result == 'duplicate') {
+        $duplicate = true;
+    }
+    else {
+        $error = true;
+    }
 }
 ?>
 <h2 class="ps-2">Add Client</h2>
@@ -22,6 +32,16 @@ if (isset($_POST['submitClient'])) {
         <?php if($clientAdded): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             Client added succesfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php elseif($duplicate): ?>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            Client not added, duplicate entry!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php elseif($error): ?>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            Client cannot be added due to some error/invalid entry!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <?php endif; ?>
@@ -66,7 +86,7 @@ if (isset($_POST['submitClient'])) {
                 </div>
             </div>
             <div class="d-flex flex-row-reverse">
-                <button type="submit" name="submitClient" class="btn rounded-pill me-2 btn-primary">Submit</button>
+                <button type="submit" name="submitClient" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>
             </div>
         </form>
     </div>

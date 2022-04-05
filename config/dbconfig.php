@@ -12,4 +12,6 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+$MYSQL_DUPLICATE_ERROR_CODE = 1062;
+
 ?>

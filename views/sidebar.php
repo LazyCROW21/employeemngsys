@@ -185,7 +185,7 @@ require_once "../config/config.php";
         </li>
         <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addClient.php' || $_SERVER['REQUEST_URI'] == '/viewClients.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-spreadsheet"></i>
+                <i class="menu-icon tf-icons bx bx-group"></i>
                 <div data-i18n="Clients">Clients</div>
             </a>
             <ul class="menu-sub">
@@ -203,7 +203,7 @@ require_once "../config/config.php";
         </li>
         <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addAdmin.php' || $_SERVER['REQUEST_URI'] == '/viewAdmins.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-spreadsheet"></i>
+                <i class="menu-icon tf-icons bx bx-crown"></i>
                 <div data-i18n="Admins">Admins</div>
             </a>
             <ul class="menu-sub">

@@ -14,7 +14,7 @@ if (isset($_POST['submitLeave'])) {
     ) {
         exit("invalid input");
     }
-    $_POST['UserId'] = 1;
+    $_POST['UserId'] = $_SESSION['UserId'];
     $_POST['Status'] = 'Pending';
     $leaveModel = new LeaveModel($conn);
     $result = $leaveModel->insert($_POST);

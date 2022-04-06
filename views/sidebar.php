@@ -238,8 +238,8 @@ require_once "../config/config.php";
                 <div data-i18n="Support">Request Leave</div>
             </a>
         </li>
-        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/#.php' ? 'active' : '' ?>">
-            <a href="#" 
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/leaveReport.php' ? 'active' : '' ?>">
+            <a href="/leaveReport.php" 
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-calendar"></i>
                 <div data-i18n="Support">Leave Report</div>

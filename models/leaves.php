@@ -41,6 +41,11 @@ class LeaveModel {
         return $this->conn->query($sql);
     }
 
+    public function findPastLeavesByUserId($userId) {
+        $sql = "SELECT * FROM {$this->table} WHERE UserId = $userId AND Status != 'Pending'";
+        return $this->conn->query($sql);
+    }
+
     public function insert($data)
     {
         $columnList = '(';

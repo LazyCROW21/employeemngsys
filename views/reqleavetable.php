@@ -14,7 +14,7 @@ $rows = $leaveModel->findPendingLeaves();
     <thead>
       <tr>
         <th>#</th>
-        <th class="text-start">Employee Name (ID)</th>
+        <th class="text-start">Employee Name</th>
         <th>Leave Type</th>
         <th>Effect On Pay</th>
         <th>From</th>
@@ -30,7 +30,7 @@ $rows = $leaveModel->findPendingLeaves();
       <?php foreach ($rows as $row) : ?>
         <tr>
           <td><?= $count++ ?></td>
-          <td class="text-start"><?= $row['UserId'] ?></td>
+          <td class="text-start"><?= $row['Name'] ?></td>
           <td class="text-start"><?= $row['LeaveType'] ?></td>
           <td><?= $row['EffectOnPay'] ?></td>
           <td><?= substr($row['StartedAt'], 0, 10) ?></td>

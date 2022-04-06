@@ -21,7 +21,9 @@ if(isset($_POST['Login'])) {
     $_SESSION['UserId'] = $data['Id'];
     $_SESSION['Name'] = $data['Name'];
     $_SESSION['DepartmentId'] = $data['DepartmentId'];
+    $_SESSION['Department'] = $data['Department'];
     $_SESSION['DesignationId'] = $data['DesignationId'];
+    $_SESSION['Designation'] = $data['Designation'];
     header('Location: ' . '/index.php', true, 302);
     die();
   }

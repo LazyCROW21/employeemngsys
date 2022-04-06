@@ -36,7 +36,12 @@ class UserModel {
     }
 
     public function checkLogin($email, $pwd) { 
-        $query = "SELECT Id, Name, DepartmentId, DesignationId  FROM {$this->table} WHERE Email = ? AND Pwd = ? AND DeletedAt IS NULL";
+        $query = 
+        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
+        FROM {$this->table} U 
+        INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
+        INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
+        WHERE U.Email = ? AND U.Pwd = ? AND U.DeletedAt IS NULL";
         $data = false;
         try {
             $stmt = $this->conn->prepare($query);

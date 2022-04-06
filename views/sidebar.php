@@ -155,12 +155,12 @@ require_once "../config/config.php";
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="/addDept.php" class="menu-link">
+                    <a href="/payStaff.php" class="menu-link">
                         <div data-i18n="Pay Staff">Pay Staff</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="/viewDept.php" class="menu-link">
+                    <a href="/viewPayments.php" class="menu-link">
                         <div data-i18n="Payment Record">Payment Record</div>
                     </a>
                 </li>

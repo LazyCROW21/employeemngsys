@@ -35,6 +35,24 @@ class UserModel {
         return $this->conn->query($sql);
     }
 
+    public function checkLogin($email, $pwd) { 
+        $query = "SELECT Id, Name, DepartmentId, DesignationId  FROM {$this->table} WHERE Email = ? AND Pwd = ? AND DeletedAt IS NULL";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $email, $pwd);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            if($result->num_rows == 1) {
+                $data = $result->fetch_assoc();
+            }
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
+    }
+
     public function insert($data)
     {
         $columnList = '(';

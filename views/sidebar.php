@@ -1,7 +1,6 @@
 <?php
 require_once "../config/config.php";
 ?>
-
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="/index.php" class="app-brand-link">
@@ -61,8 +60,8 @@ require_once "../config/config.php";
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item active">
-            <a href="index.html" class="menu-link">
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/' ? 'active' : '' ?>">
+            <a href="/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
@@ -71,36 +70,36 @@ require_once "../config/config.php";
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Manage</span>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addDept.php' || $_SERVER['REQUEST_URI'] == '/viewDept.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-building"></i>
                 <div data-i18n="Departments">Departments</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addDept.php' ? 'active' : '' ?>">
                     <a href="/addDept.php" class="menu-link">
                         <div data-i18n="Add Department">Add Department</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewDept.php' ? 'active' : '' ?>">
                     <a href="/viewDept.php" class="menu-link">
                         <div data-i18n="View Departments">View Departments</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addDesg.php' || $_SERVER['REQUEST_URI'] == '/viewDesg.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-briefcase"></i>
                 <div data-i18n="Designations">Designations</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addDesg.php' ? 'active' : '' ?>">
                     <a href="/addDesg.php" class="menu-link" >
                         <div data-i18n="Add Designaion">Add Designaion</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewDesg.php' ? 'active' : '' ?>">
                     <a href="/viewDesg.php" class="menu-link" >
                         <div data-i18n="View Designaions">View Designaions</div>
                     </a>
@@ -109,18 +108,18 @@ require_once "../config/config.php";
         </li>
 
         <!-- Staff -->
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addStaff.php' || $_SERVER['REQUEST_URI'] == '/viewStaff.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div data-i18n="Staff">Staff</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addStaff.php' ? 'active' : '' ?>">
                     <a href="/addStaff.php" class="menu-link" >
                         <div data-i18n="Add Staff">Add Staff</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewStaff.php' ? 'active' : '' ?>">
                     <a href="/viewStaff.php" class="menu-link" >
                         <div data-i18n="View Staff">View Staff</div>
                     </a>
@@ -130,90 +129,90 @@ require_once "../config/config.php";
         <!--/ Staff -->
 
         <!-- Leaves -->
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/leaveRequests.php' || $_SERVER['REQUEST_URI'] == '/pastLeaves.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-calendar-x"></i>
                 <div data-i18n="Leaves">Leaves</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/leaveRequests.php' ? 'active' : '' ?>">
                     <a href="/leaveRequests.php" class="menu-link" >
                         <div data-i18n="Requests">Requests</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/pastLeaves.php' ? 'active' : '' ?>">
                     <a href="/pastLeaves.php" class="menu-link" >
                         <div data-i18n="Past Leaves">Past Leaves</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/payStaff.php' || $_SERVER['REQUEST_URI'] == '/viewPayments.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-credit-card"></i>
                 <div data-i18n="Payroll">Payroll</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/payStaff.php' ? 'active' : '' ?>">
                     <a href="/payStaff.php" class="menu-link">
                         <div data-i18n="Pay Staff">Pay Staff</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewPayments.php' ? 'active' : '' ?>">
                     <a href="/viewPayments.php" class="menu-link">
                         <div data-i18n="Payment Record">Payment Record</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addProject.php' || $_SERVER['REQUEST_URI'] == '/viewProjects.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-spreadsheet"></i>
                 <div data-i18n="Projects">Projects</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addProject.php' ? 'active' : '' ?>">
                     <a href="/addProject.php" class="menu-link">
                         <div data-i18n="New Project">New Project</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewProjects.php' ? 'active' : '' ?>">
                     <a href="/viewProjects.php" class="menu-link">
                         <div data-i18n="View Projects">View Projects</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addClient.php' || $_SERVER['REQUEST_URI'] == '/viewClients.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-spreadsheet"></i>
                 <div data-i18n="Clients">Clients</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addClient.php' ? 'active' : '' ?>">
                     <a href="/addClient.php" class="menu-link">
                         <div data-i18n="New Clients">New Client</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewClients.php' ? 'active' : '' ?>">
                     <a href="/viewClients.php" class="menu-link">
                         <div data-i18n="View Clients">View Clients</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addAdmin.php' || $_SERVER['REQUEST_URI'] == '/viewAdmins.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-spreadsheet"></i>
                 <div data-i18n="Admins">Admins</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addAdmin.php' ? 'active' : '' ?>">
                     <a href="/addAdmin.php" class="menu-link">
                         <div data-i18n="New Admins">New Admin</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewAdmins.php' ? 'active' : '' ?>">
                     <a href="/viewAdmins.php" class="menu-link">
                         <div data-i18n="View Admins">View Admins</div>
                     </a>
@@ -225,31 +224,38 @@ require_once "../config/config.php";
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Personal</span>
         </li>
-        <li class="menu-item">
-            <a href="/profile.php" 
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/#.php' ? 'active' : '' ?>">
+            <a href="#" 
                 class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Support">Profile</div>
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div data-i18n="Support">Salary Report</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/requestLeave.php' ? 'active' : '' ?>">
             <a href="/requestLeave.php" 
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-calendar-minus"></i>
                 <div data-i18n="Support">Request Leave</div>
             </a>
         </li>
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/#.php' ? 'active' : '' ?>">
+            <a href="#" 
+                class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div data-i18n="Support">Leave Report</div>
+            </a>
+        </li>
 
         <!-- Misc -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span></li>
-        <li class="menu-item">
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/support.php' ? 'active' : '' ?>">
             <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" 
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-support"></i>
                 <div data-i18n="Support">Support</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/policy.php' ? 'active' : '' ?>">
             <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" 
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>

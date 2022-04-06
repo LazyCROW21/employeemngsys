@@ -1,19 +1,11 @@
 <?php
-require_once "../models/departments.php";
-require_once "../models/designations.php";
 require_once "../models/users.php";
 require_once "../config/dbconfig.php";
 $paymentDone = false;
 $duplicate = false;
 $error = false;
-$deptModel = new DeptModel($conn);
-$desgModel = new DesgModel($conn);
 $userModel = new UserModel($conn);
-$departments = $deptModel->findAll();
-$designations = $desgModel->findAll();
 $users = $userModel->findAll();
-
-$states = ['Andaman and Nicobar', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', ' Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka    ', 'Kerala', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Orissa', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
 if (isset($_POST['submitUser'])) {
     if(
@@ -110,31 +102,31 @@ if (isset($_POST['submitUser'])) {
                 <tbody class="payslip-t">
                     <tr>
                         <td>Basic</td>
-                        <td>50000</td>
+                        <td><input name="Basic" type="number" class="form-control text-end" value="50000" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>House Rent Allowance</td>
-                        <td>500</td>
+                        <td><input name="HRA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Dearness Allowance</td>
-                        <td>500</td>
+                        <td><input name="DA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Travelling Allowance</td>
-                        <td>500</td>
+                        <td><input name="TA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Medical Allowance</td>
-                        <td>500</td>
+                        <td><input name="MA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Bonus</td>
-                        <td>500</td>
+                        <td><input name="Bonus" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Overtime</td>
-                        <td>500</td>
+                        <td><input name="Overtime" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
                     </tr>
                 </tbody>
             </table>
@@ -145,18 +137,18 @@ if (isset($_POST['submitUser'])) {
                 <tbody class="payslip-t">
                     <tr>
                         <td>Income Tax</td>
-                        <td>400</td>
+                        <td><input name="IncomeTax" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Professional Tax</td>
-                        <td>400</td>
+                        <td><input name="ProfessionalTax" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td>Provident Fund</td>
-                        <td>400</td>
+                        <td><input name="PF" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
                     </tr>
                     <td>Employees' State Insurance</td>
-                    <td>400</td>
+                    <td><input name="ESI" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
                     </tr>
                 </tbody>
             </table>
@@ -188,6 +180,7 @@ if (isset($_POST['submitUser'])) {
     </div>
     <div class="d-flex flex-row-reverse">
         <button type="submit" name="submitUser" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>
+        <button type="button" class="btn rounded-pill me-2 btn-secondary">Print</button>
     </div>
 </form>
 

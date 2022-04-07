@@ -1,17 +1,36 @@
+<?php
+session_start();
+if(isset($_SESSION['UserId'])) {
+  header('Location: ' . '/index.php', true, 302);
+  die();
+}
+
+require_once '../models/users.php';
+require_once '../config/dbconfig.php';
+
+$userModel = new UserModel($conn);
+
+$loginError = false;
+
+if(isset($_POST['Login'])) {
+  if(!isset($_POST['Email']) || !isset($_POST['Pwd'])) {
+    exit('invalid');
+  }
+  $data = $userModel->checkLogin($_POST['Email'], $_POST['Pwd']);
+  if($data) {
+    $_SESSION['UserId'] = $data['Id'];
+    $_SESSION['Name'] = $data['Name'];
+    $_SESSION['DepartmentId'] = $data['DepartmentId'];
+    $_SESSION['Department'] = $data['Department'];
+    $_SESSION['DesignationId'] = $data['DesignationId'];
+    $_SESSION['Designation'] = $data['Designation'];
+    header('Location: ' . '/index.php', true, 302);
+    die();
+  }
+  $loginError = true;
+}
+?>
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style customizer-hide"
@@ -27,9 +46,9 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Login</title>
 
-    <meta name="description" content="" />
+    <meta name="description" content="Login to EMS" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
@@ -131,22 +150,22 @@
                       </g>
                     </svg>
                   </span>
-                  <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                  <span class="app-brand-text demo text-body fw-bolder">EMS</span>
                 </a>
               </div>
               <!-- /Logo -->
-              <h4 class="mb-2">Welcome to Sneat! 👋</h4>
+              <h4 class="mb-2">Welcome to EMS! 👋</h4>
               <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-              <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+              <form id="formAuthentication" class="mb-3" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email or Username</label>
+                  <label for="email" class="form-label">Email</label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
-                    name="email-username"
-                    placeholder="Enter your email or username"
+                    name="Email"
+                    placeholder="Enter your email"
                     autofocus
                   />
                 </div>
@@ -162,13 +181,16 @@
                       type="password"
                       id="password"
                       class="form-control"
-                      name="password"
+                      name="Pwd"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
+                <?php if($loginError): ?>
+                <p class="text-center text-danger">Invalid Email/Password</p>
+                <?php endif; ?>
                 <div class="mb-3">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember-me" />
@@ -176,16 +198,9 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                  <button name="Login" value="login" class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                 </div>
               </form>
-
-              <p class="text-center">
-                <span>New on our platform?</span>
-                <a href="auth-register-basic.html">
-                  <span>Create an account</span>
-                </a>
-              </p>
             </div>
           </div>
           <!-- /Register -->

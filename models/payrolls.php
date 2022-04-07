@@ -1,23 +1,34 @@
 <?php
-class LeaveModel {
+class PRModel {
     public $conn;
 
-    private $table = "leaves";
+    private $table = "payroll";
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
-        [ 'name' => 'Id', 'type' => 'i', 'required' => true ],
-        [ 'name' => 'StartedAt', 'type' => 's', 'required' => true ],
-        [ 'name' => 'StartHalf', 'type' => 's', 'required' => true ],
-        [ 'name' => 'EndedAt', 'type' => 's', 'required' => true ],
-        [ 'name' => 'EndHalf', 'type' => 's', 'required' => true ],
-        [ 'name' => 'LeaveType', 'type' => 's', 'required' => true ],
-        [ 'name' => 'EffectOnPay', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Reason', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Status', 'type' => 's', 'required' => true ]
+        [ 'name' => 'UserId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'UserName', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Email', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Phone', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Department', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Designation', 'type' => 's', 'required' => true ],
+        [ 'name' => 'PAN', 'type' => 's', 'required' => true ],
+        [ 'name' => 'BAN', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Basic', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'HRA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'DA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'TA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'IncomeTax', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'ProfessionalTax', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'PF', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Overtime', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Bonus', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'MA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'ESI', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Month', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'Year', 'type' => 'i', 'required' => true ],
     ];
     
-    private $respondedBy = [ 'name' => 'RespondedBy', 'type' => 'i', 'required' => false ];
-    private $respondedAt = [ 'name' => 'RespondedAt', 'type' => 's', 'required' => false ];
+    private $grandedBy = [ 'name' => 'GrantedBy', 'type' => 'i', 'required' => true ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -28,22 +39,6 @@ class LeaveModel {
 
     public function findAll() {
         $sql = "SELECT * FROM {$this->table}";
-        return $this->conn->query($sql);
-    }
-
-    public function findPendingLeaves() {
-        $sql = "SELECT * FROM {$this->table} JOIN user ON user.Id = leaves.EmployeeId  WHERE Status = 'Pending'";
-        return $this->conn->query($sql);
-    }
-
-    public function findPastLeaves() {
-        $sql = "SELECT leaves.Id, leaves.StartedAt, leaves.EndedAt, leaves.LeaveType, leaves.EffectOnPay, leaves.Reason, leaves.Status, leaves.RespondedBy, leaves.RespondedOn, leaves.CreatedAt, user.Name FROM leaves JOIN user ON user.Id = leaves.EmployeeId WHERE Status != 'Pending'";
-        // $sql = "SELECT * FROM {$this->table} WHERE Status != 'Pending'";
-        return $this->conn->query($sql);
-    }
-
-    public function findPastLeavesByUserId($userId) {
-        $sql = "SELECT * FROM {$this->table} WHERE UserId = $userId AND Status != 'Pending'";
         return $this->conn->query($sql);
     }
 
@@ -66,6 +61,13 @@ class LeaveModel {
                     array_push($insertData, null);
                 }
             }
+        }
+        
+        if($this->grandedBy) {
+            $columnList .= $this->grandedBy['name'].',';
+            $params .= '?,';
+            $paramType .= $this->grandedBy['type'];
+            array_push($insertData, 1);
         }
 
         if($this->createdAt) {

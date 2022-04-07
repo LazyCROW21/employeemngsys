@@ -1,17 +1,5 @@
+<?php require_once '../config/checksession.php'; ?>
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style layout-menu-fixed"
@@ -73,10 +61,10 @@
       }
       .select2-container{
         width: 100%!important;
-    }
-        .select2-search--dropdown .select2-search__field {
+      }
+      .select2-search--dropdown .select2-search__field {
         width: 98%;
-        }
+      }
     </style>
   </head>
 

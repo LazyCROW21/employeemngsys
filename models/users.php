@@ -35,6 +35,57 @@ class UserModel {
         return $this->conn->query($sql);
     }
 
+    public function findAllActive() {
+        $sql = "SELECT * FROM {$this->table} WHERE {$this->deletedAt['name']} IS NULL";
+        return $this->conn->query($sql);
+    }
+
+    public function checkLogin($email, $pwd) { 
+        $query = 
+        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
+        FROM {$this->table} U 
+        INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
+        INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
+        WHERE U.Email = ? AND U.Pwd = ? AND U.DeletedAt IS NULL";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ss', $email, $pwd);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            if($result->num_rows == 1) {
+                $data = $result->fetch_assoc();
+            }
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
+    }
+
+    public function findById($id) { 
+        $query = 
+        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department, U.Basic AS Basic, U.PAN AS PAN, U.BAN AS BAN, U.Phone AS Phone, U.Email AS Email 
+        FROM {$this->table} U 
+        INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
+        INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
+        WHERE U.Id = ? AND U.DeletedAt IS NULL";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            if($result->num_rows == 1) {
+                $data = $result->fetch_assoc();
+            }
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
+    }
+
     public function insert($data)
     {
         $columnList = '(';
@@ -59,8 +110,8 @@ class UserModel {
         if($this->createdBy) {
             $columnList .= $this->createdBy['name'].',';
             $params .= '?,';
-            $paramType .= $this->createdAt['type'];
-            array_push($insertData, 1);
+            $paramType .= $this->createdBy['type'];
+            array_push($insertData, $data['CreatedBy']);
         }
 
         if($this->createdAt) {

@@ -15,7 +15,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - View Projects</title>
+    <title>Dashboard - Leave Report</title>
 
     <meta name="description" content="Employee management system" />
 
@@ -52,18 +52,26 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="/assets/js/config.js"></script>
 
-    <!-- Custom CSS
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" /> -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-        <!-- Custom CSS -->
-        <style>
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+      .select2-selection {
+        height: 2.3rem !important;
+        padding: 0.2rem;
+      }
+      .select2-container{
+        width: 100%!important;
+    }
+        .select2-search--dropdown .select2-search__field {
+        width: 98%;
+        }
       .action-btn {
         visibility: hidden;
       }
       tr:hover .action-btn {
         visibility: visible;
       }
-    </style> 
+    </style>
   </head>
 
   <body>
@@ -82,7 +90,7 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
-                <?php require_once "../views/projecttable.php" ?>
+                <?php require_once "../views/lrtable.php"; ?>
             </div>
             <!-- / Content -->
 
@@ -123,12 +131,10 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <!-- Custom Page JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#projecttable').DataTable({});
-        });
+      $(document).ready(function () {
+        $('#leavestable').DataTable({});
+      });
     </script>
 </html>

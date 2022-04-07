@@ -37,7 +37,7 @@ $rows = $leaveModel->findPendingLeaves();
         <tr>
           <td><?= $count++ ?></td>
           <td class="text-start"><?= $row['Name'] ?></td>
-          <td class="text-start"><?= $row['LeaveType'] ?></td>
+          <td><?= $row['LeaveType'] ?></td>
           <td><?= $row['EffectOnPay'] ?></td>
           <td><?= substr($row['StartedAt'], 0, 10) ?></td>
           <td><?= substr($row['EndedAt'], 0, 10) ?></td>

@@ -9,6 +9,13 @@ $rows = $leaveModel->findPastLeaves();
 
 <h2 class="ps-2">Past Leave Requests</h2>
 <hr>
+
+<?php if ($rows == NULL): ?>
+    <h5 class="text-center">No Past Leave Records!</h5>
+  <?php endif; ?>
+
+<?php if ($rows != NULL): ?>
+
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
   <table class="table table-hover text-center border-top" id="leavestable">
     <thead>
@@ -61,3 +68,5 @@ $rows = $leaveModel->findPastLeaves();
     </tbody>
   </table>
 </div>
+<?php endif; ?>
+

@@ -10,6 +10,12 @@ $rows = $leaveModel->findPendingLeaves();
 <h2 class="ps-2">New Leave Requests</h2>
 <hr>
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
+
+  <?php if ($rows == NULL): ?>
+    <h5 class="text-center">No new leave Requests!</h5>
+  <?php endif; ?>
+
+  <?php if ($rows != NULL): ?>
   <table class="table table-hover text-center border-top" id="leavestable">
     <thead>
       <tr>
@@ -49,4 +55,6 @@ $rows = $leaveModel->findPendingLeaves();
       <?php endforeach; ?>
     </tbody>
   </table>
+  <?php endif; ?>
+
 </div>

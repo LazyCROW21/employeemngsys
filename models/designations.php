@@ -18,7 +18,7 @@ class DesgModel {
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt, designation.DeletedAt FROM `designation` JOIN department ON designation.DepartmentId = department.Id WHERE 1 ORDER BY `department`.`Name` ASC , `designation`.`Name` ASC";
         return $this->conn->query($sql);
     }
 

@@ -37,7 +37,7 @@ function getPay($data) {
 $rows = $prModel->findAll();
 ?>
 
-<h2 class="ps-2">All Projects</h2>
+<h2 class="ps-2">Payment History</h2>
 <hr>
 <!-- table-responsive -->
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">

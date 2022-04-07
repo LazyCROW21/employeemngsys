@@ -203,18 +203,18 @@ require_once "../config/config.php";
         </li>
         <li class="menu-item <?= ($_SERVER['REQUEST_URI'] == '/addAdmin.php' || $_SERVER['REQUEST_URI'] == '/viewAdmins.php') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-crown"></i>
-                <div data-i18n="Admins">Admins</div>
+                <i class="menu-icon tf-icons bx bx-lock"></i>
+                <div data-i18n="Admins">Permissions</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/addAdmin.php' ? 'active' : '' ?>">
                     <a href="/addAdmin.php" class="menu-link">
-                        <div data-i18n="New Admins">New Admin</div>
+                        <div data-i18n="New Admins">Give Permission</div>
                     </a>
                 </li>
                 <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewAdmins.php' ? 'active' : '' ?>">
                     <a href="/viewAdmins.php" class="menu-link">
-                        <div data-i18n="View Admins">View Admins</div>
+                        <div data-i18n="View Admins">View User Permissions</div>
                     </a>
                 </li>
             </ul>

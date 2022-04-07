@@ -1,11 +1,12 @@
 <?php
 require_once "../models/users.php";
+require_once "../models/payrolls.php";
 require_once "../config/dbconfig.php";
 $paymentDone = false;
 $duplicate = false;
 $error = false;
 $userModel = new UserModel($conn);
-$users = $userModel->findAll();
+$users = $userModel->findAllActive();
 
 $months = [
     ['Id' => 1, 'Name' => 'January'],
@@ -32,21 +33,21 @@ $years = [
     ['Id' => 2025, 'Name' => '2025']
 ];
 
-if (isset($_POST['submitUser'])) {
+if (isset($_POST['submitPayroll'])) {
     if(
-        !isset($_POST['Name']) || !isset($_POST['Email']) ||
-        !isset($_POST['Phone']) || !isset($_POST['DateOfBirth']) ||
-        !isset($_POST['Gender']) || !isset($_POST['AddressL1']) ||
-        !isset($_POST['AddressL2']) || !isset($_POST['City']) ||
-        !isset($_POST['State']) || !isset($_POST['DepartmentId']) ||
-        !isset($_POST['DesignationId']) || !isset($_POST['PAN']) ||
-        !isset($_POST['BAN']) || !isset($_POST['Basic']) || !isset($_POST['DateOfJoining'])
+        !isset($_POST['UserId']) || !isset($_POST['Email']) || !isset($_POST['Phone']) || 
+        !isset($_POST['UserName']) || !isset($_POST['Department']) || !isset($_POST['Designation']) ||
+        !isset($_POST['PAN']) || !isset($_POST['BAN']) || !isset($_POST['Month']) ||
+        !isset($_POST['Year']) || !isset($_POST['Basic']) || !isset($_POST['HRA']) ||
+        !isset($_POST['DA']) || !isset($_POST['TA']) || !isset($_POST['MA']) || 
+        !isset($_POST['Bonus']) || !isset($_POST['Overtime']) || !isset($_POST['IncomeTax']) || 
+        !isset($_POST['ProfessionalTax']) || !isset($_POST['PF']) || !isset($_POST['ESI'])
     ) {
         exit("invalid input");
     }
-    $_POST['Address'] = $_POST['AddressL1'].', '. $_POST['AddressL2'];
-    unset($_POST['AddressL1']);
-    unset($_POST['AddressL2']);
+    $_POST['GrantedBy'] = $_SESSION['UserId'];
+    $prModel = new PRModel($conn);
+    $result = $prModel->insert($_POST);
     if($result == 'success'){
         $paymentDone = true;
     } 
@@ -84,9 +85,10 @@ if (isset($_POST['submitUser'])) {
         <div class="row">
             <div class="col-6 col-md-6">
                 <label for="emp-select" class="col-form-label">Select Employee</label>
+                <input name="UserName" type="hidden" id="emp-name" />
                 <select id="emp-select" name="UserId" class="select2 form-control" data-allow-clear="true"
                     onchange="getUserDetails(this.value)" required>
-                    <option selected disabled>Select an Employee</option>
+                    <option selected readonly>Select an Employee</option>
                     <?php foreach($users as $user): ?>
                     <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
                     <?php endforeach; ?>
@@ -94,39 +96,39 @@ if (isset($_POST['submitUser'])) {
             </div>
             <div class="col-6 col-md-6">
                 <label for="emp-id" class="col-form-label">Employee Id</label>
-                <input id="emp-id" type="text" class="form-control" disabled />
+                <input id="emp-id" type="text" class="form-control" readonly />
             </div>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="email-input" class="col-form-label">Email</label>
-            <input class="form-control" type="email" id="emp-email" disabled />
+            <input name="Email" class="form-control" type="email" id="emp-email" readonly />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Phone</label>
-            <input class="form-control" type="text" id="emp-phone" disabled />
+            <input name="Phone" class="form-control" type="text" id="emp-phone" readonly />
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label class="col-form-label">Department</label>
-            <input class="form-control" type="text" value="" id="emp-dept" disabled />
+            <input name="Department" class="form-control" type="text" id="emp-dept" readonly />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Designation</label>
-            <input class="form-control" type="text" id="emp-desg" disabled />
+            <input name="Designation" class="form-control" type="text" id="emp-desg" readonly />
         </div>
     </div>
     <hr />
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label class="col-form-label">PAN</label>
-            <input class="form-control" type="text" id="emp-pan" disabled />
+            <input name="PAN" class="form-control" type="text" id="emp-pan" readonly />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Bank Acount Number</label>
-            <input class="form-control" type="text" maxlength="18" id="emp-ban" disabled />
+            <input name="BAN" class="form-control" type="text" maxlength="18" id="emp-ban" readonly />
         </div>
     </div>
     <div class="divider">
@@ -144,7 +146,7 @@ if (isset($_POST['submitUser'])) {
         </div>
         <div class="col-12 col-md-6">
             <label for="year-select" class="col-form-label">Year</label>
-            <select id="year-select" name="Month" class="select2 form-control" data-allow-clear="true" required>
+            <select id="year-select" name="Year" class="select2 form-control" data-allow-clear="true" required>
                 <?php foreach($years as $year): ?>
                 <option value="<?= $year['Id'] ?>" <?= $currY == $year['Id'] ? 'selected' : '' ?>><?= $year['Name'] ?>
                 </option>
@@ -160,7 +162,7 @@ if (isset($_POST['submitUser'])) {
                     <tr>
                         <td>Basic</td>
                         <td><input name="Basic" type="number" class="form-control text-end" value="50000" min="0"
-                                step="0.01" oninput="update()" required /></td>
+                                step="0.01" oninput="update()" id="emp-basic" required /></td>
                     </tr>
                     <tr>
                         <td>House Rent Allowance</td>
@@ -247,7 +249,8 @@ if (isset($_POST['submitUser'])) {
         </table>
     </div>
     <div class="d-flex flex-row-reverse">
-        <button type="submit" name="submitUser" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>
+        <button type="submit" name="submitPayroll" value="submit"
+            class="btn rounded-pill me-2 btn-primary">Submit</button>
         <button type="button" class="btn rounded-pill me-2 btn-secondary">Print</button>
     </div>
 </form>
@@ -257,7 +260,20 @@ if (isset($_POST['submitUser'])) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
+                let dataObj = JSON.parse(this.responseText);
+                console.log(dataObj);
+                if(!dataObj) {
+                    return;
+                }
+                document.getElementById('emp-name').value = dataObj['Name'];
+                document.getElementById('emp-basic').value = dataObj['Basic'];
+                document.getElementById('emp-id').value = dataObj['Id'];
+                document.getElementById('emp-pan').value = dataObj['PAN'];
+                document.getElementById('emp-ban').value = dataObj['BAN'];
+                document.getElementById('emp-phone').value = dataObj['Phone'];
+                document.getElementById('emp-email').value = dataObj['Email'];
+                document.getElementById('emp-dept').value = dataObj['Department'];
+                document.getElementById('emp-desg').value = dataObj['Designation'];
             }
         };
         xhttp.open("GET", "/api/user.php?Id=" + id, true);

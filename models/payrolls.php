@@ -2,26 +2,33 @@
 class PRModel {
     public $conn;
 
-    private $table = "user";
+    private $table = "payroll";
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
         [ 'name' => 'UserId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'UserName', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Email', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Phone', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Department', 'type' => 's', 'required' => true ],
+        [ 'name' => 'Designation', 'type' => 's', 'required' => true ],
+        [ 'name' => 'PAN', 'type' => 's', 'required' => true ],
+        [ 'name' => 'BAN', 'type' => 's', 'required' => true ],
         [ 'name' => 'Basic', 'type' => 'd', 'required' => true ],
         [ 'name' => 'HRA', 'type' => 'd', 'required' => true ],
         [ 'name' => 'DA', 'type' => 'd', 'required' => true ],
-        [ 'name' => 'Gender', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Address', 'type' => 's', 'required' => true ],
-        [ 'name' => 'City', 'type' => 's', 'required' => true ],
-        [ 'name' => 'State', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Basic', 'type' => 'd', 'required' => true ],
-        [ 'name' => 'DateOfJoining', 'type' => 's', 'required' => true ],
-        [ 'name' => 'DepartmentId', 'type' => 'i', 'required' => true ],
-        [ 'name' => 'DesignationId', 'type' => 'i', 'required' => true ],
-        [ 'name' => 'PAN', 'type' => 's', 'required' => true ],
-        [ 'name' => 'BAN', 'type' => 's', 'required' => true ],
+        [ 'name' => 'TA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'IncomeTax', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'ProfessionalTax', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'PF', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Overtime', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Bonus', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'MA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'ESI', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'Month', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'Year', 'type' => 'i', 'required' => true ],
     ];
     
-    private $createdBy = [ 'name' => 'CreatedBy', 'type' => 'i', 'required' => true ];
+    private $grandedBy = [ 'name' => 'GrantedBy', 'type' => 'i', 'required' => true ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -33,52 +40,6 @@ class PRModel {
     public function findAll() {
         $sql = "SELECT * FROM {$this->table}";
         return $this->conn->query($sql);
-    }
-
-    public function checkLogin($email, $pwd) { 
-        $query = 
-        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
-        FROM {$this->table} U 
-        INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
-        INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
-        WHERE U.Email = ? AND U.Pwd = ? AND U.DeletedAt IS NULL";
-        $data = false;
-        try {
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ss', $email, $pwd);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-            if($result->num_rows == 1) {
-                $data = $result->fetch_assoc();
-            }
-        } catch (Exception $e)  {
-            $data = false;
-        }
-        return $data;
-    }
-
-    public function findById($id) { 
-        $query = 
-        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
-        FROM {$this->table} U 
-        INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
-        INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
-        WHERE U.Id = ? AND U.DeletedAt IS NULL";
-        $data = false;
-        try {
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-            if($result->num_rows == 1) {
-                $data = $result->fetch_assoc();
-            }
-        } catch (Exception $e)  {
-            $data = false;
-        }
-        return $data;
     }
 
     public function insert($data)
@@ -102,10 +63,10 @@ class PRModel {
             }
         }
         
-        if($this->createdBy) {
-            $columnList .= $this->createdBy['name'].',';
+        if($this->grandedBy) {
+            $columnList .= $this->grandedBy['name'].',';
             $params .= '?,';
-            $paramType .= $this->createdAt['type'];
+            $paramType .= $this->grandedBy['type'];
             array_push($insertData, 1);
         }
 

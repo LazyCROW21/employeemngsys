@@ -158,8 +158,8 @@ require_once "../config/config.php";
                         <div data-i18n="Pay Staff">Pay Staff</div>
                     </a>
                 </li>
-                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/viewPayments.php' ? 'active' : '' ?>">
-                    <a href="/viewPayments.php" class="menu-link">
+                <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/payHistory.php' ? 'active' : '' ?>">
+                    <a href="/payHistory.php" class="menu-link">
                         <div data-i18n="Payment Record">Payment Record</div>
                     </a>
                 </li>

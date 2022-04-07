@@ -35,6 +35,11 @@ class UserModel {
         return $this->conn->query($sql);
     }
 
+    public function findAllActive() {
+        $sql = "SELECT * FROM {$this->table} WHERE {$this->deletedAt['name']} IS NULL";
+        return $this->conn->query($sql);
+    }
+
     public function checkLogin($email, $pwd) { 
         $query = 
         "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
@@ -60,7 +65,7 @@ class UserModel {
 
     public function findById($id) { 
         $query = 
-        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department 
+        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, DEPT.Name AS Department, U.Basic AS Basic, U.PAN AS PAN, U.BAN AS BAN, U.Phone AS Phone, U.Email AS Email 
         FROM {$this->table} U 
         INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
         INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
@@ -105,8 +110,8 @@ class UserModel {
         if($this->createdBy) {
             $columnList .= $this->createdBy['name'].',';
             $params .= '?,';
-            $paramType .= $this->createdAt['type'];
-            array_push($insertData, 1);
+            $paramType .= $this->createdBy['type'];
+            array_push($insertData, $data['CreatedBy']);
         }
 
         if($this->createdAt) {

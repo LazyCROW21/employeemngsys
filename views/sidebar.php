@@ -245,22 +245,5 @@ require_once "../config/config.php";
                 <div data-i18n="Support">Leave Report</div>
             </a>
         </li>
-
-        <!-- Misc -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span></li>
-        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/support.php' ? 'active' : '' ?>">
-            <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" 
-                class="menu-link">
-                <i class="menu-icon tf-icons bx bx-support"></i>
-                <div data-i18n="Support">Support</div>
-            </a>
-        </li>
-        <li class="menu-item <?= $_SERVER['REQUEST_URI'] == '/policy.php' ? 'active' : '' ?>">
-            <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" 
-                class="menu-link">
-                <i class="menu-icon tf-icons bx bx-file"></i>
-                <div data-i18n="Documentation">Company's Policy</div>
-            </a>
-        </li>
     </ul>
 </aside>

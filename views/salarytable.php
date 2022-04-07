@@ -41,7 +41,7 @@ $rows = $prModel->findAll();
 <hr>
 <!-- table-responsive -->
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
-    <table class="table table-hover border-top text-center" id="paytable">
+    <table class="table table-hover border-top text-center" id="salarytable">
         <thead>
             <tr>
                 <th>#</th>

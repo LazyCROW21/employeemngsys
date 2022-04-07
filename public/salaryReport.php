@@ -1,5 +1,18 @@
 <?php require_once '../config/checksession.php'; ?>
 <!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style layout-menu-fixed"
@@ -15,7 +28,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Leave Requests</title>
+    <title>Dashboard - Pay History</title>
 
     <meta name="description" content="Employee management system" />
 
@@ -62,15 +75,15 @@
       }
       .select2-container{
         width: 100%!important;
-    }
-        .select2-search--dropdown .select2-search__field {
-        width: 98%;
-        }
-      .action-btn {
-        visibility: hidden;
       }
-      tr:hover .action-btn {
-        visibility: visible;
+      .select2-search--dropdown .select2-search__field {
+      width: 98%;
+      }
+      .payslip-t tr td:first-child {
+        text-align: left;
+      }
+      .payslip-t tr td:last-child {
+        text-align: right;
       }
     </style>
   </head>
@@ -91,7 +104,7 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
-                <?php require_once "../views/reqleavetable.php"; ?>
+                <?php require_once "../views/salarytable.php"; ?>
             </div>
             <!-- / Content -->
 
@@ -136,9 +149,8 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-      $(".select2").select2();
-      $(document).ready(function () {
-        $('#leavestable').DataTable({});
-      });
+    $(document).ready(function () {
+        $('#salarytable').DataTable({});
+    });
     </script>
 </html>

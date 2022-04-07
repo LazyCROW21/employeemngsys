@@ -8,6 +8,30 @@ $error = false;
 $deptModel = new DeptModel($conn);
 $departments = $deptModel->findAll();
 
+$editDept = "";
+$editDesignation = "";
+
+$editFlag = false;
+
+if (isset($_GET['edit'])) {
+    $editFlag = true;
+    echo $_GET['edit'];
+    $id = $_GET['edit'];
+
+    $designationModel = new DesgModel($conn);
+    $editData = $designationModel->getDesignationById($id);
+
+    if ($editData != NULL) {
+
+        $editDept =  $editData['Department'];
+        $editDesignation =  $editData['Designation'];
+    }
+
+    echo $editData['Department']."<br>";
+        echo  $editData['Designation'];
+
+}
+
 if (isset($_POST['submitDesg'])) {
     if(
         !isset($_POST['Name'])
@@ -52,13 +76,21 @@ if (isset($_POST['submitDesg'])) {
                 <label for="dept-select" class="col-form-label">Select Department</label>
                 <select name="DepartmentId" id="dept-select" class="select2 form-control" data-allow-clear="true">
                 <?php foreach($departments as $department): ?>
-                    <option value="<?= $department['Id'] ?>"><?= $department['Name'] ?></option>
+                    <option
+                        <?php if ($editFlag && $department['Name'] == $editDept): ?>
+                            selected
+                        <?php endif; ?>
+                     value="<?= $department['Id'] ?>"><?= $department['Name'] ?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="desg-input" class="col-form-label">Create Designation</label>
-                <input name="Name" class="form-control" type="text" placeholder="Enter name here" id="desg-input" />
+                <input name="Name" class="form-control" type="text" placeholder="Enter name here"
+                    <?php if ($editFlag): ?>
+                        value = "<?= $editDesignation ?>"
+                    <?php endif; ?>
+                    id="desg-input" />
             </div>
             <div class="d-flex flex-row-reverse">
                 <button type="submit" name="submitDesg" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>

@@ -17,6 +17,7 @@ if (isset($_POST['submitProject'])) {
         exit("invalid input");
     }
     $_POST['Completed'] = 0;
+    $_POST['CreatedBy'] = $_SESSION['UserId'];
     $result = $projectModel->insert($_POST);
     if($result == 'success'){
         $projectAdded = true;

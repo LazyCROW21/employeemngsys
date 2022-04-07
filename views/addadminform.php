@@ -1,4 +1,4 @@
-<h2 class="ps-2">Add Admin</h2>
+<h2 class="ps-2">Give Permission</h2>
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 col-md-6 align-self-center">
@@ -28,16 +28,16 @@
                     <tr>
                         <td><?= $module ?></td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="" />
+                            <input class="form-check-input" type="checkbox" id="<?= $module ?>-v" />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="" />
+                            <input class="form-check-input" type="checkbox" id="<?= $module ?>-c" />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="" />
+                            <input class="form-check-input" type="checkbox" id="<?= $module ?>-m" />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="" />
+                            <input class="form-check-input" type="checkbox" id="<?= $module ?>-d" />
                         </td>
                     </tr>
                     <?php endforeach; ?>

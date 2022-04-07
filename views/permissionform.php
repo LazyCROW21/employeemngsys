@@ -3,12 +3,15 @@ require_once "../models/users.php";
 require_once "../models/permissions.php";
 require_once "../config/dbconfig.php";
 $updateSuccess = false;
+$duplicate = false;
 $error = false;
 $userModel = new UserModel($conn);
 $users = $userModel->findAll();
 
 $prModel = new PermissionModel($conn);
 $editFlag = false;
+
+$modules = ['Department', 'Designation', 'User', 'Payroll', 'Project', 'Leaves', 'Client', 'Admin'];
 
 $pDepartment = 'XXXX';
 $pDesignation = 'XXXX';
@@ -19,11 +22,46 @@ $pLeaves = 'XXXX';
 $pClient = 'XXXX';
 $pAdmin = 'XXXX';
 
+if (isset($_POST['submitP']) && isset($_GET['UserId']) && $_GET['UserId'] != $_SESSION['UserId']) {
+    $data = array();
+    foreach($modules as $module) {
+        $perm = '';
+        if(isset($_POST[$module.'-V'])) {
+            $perm .= 'V';
+        } else {
+            $perm .= 'X';
+        }
+        if(isset($_POST[$module.'-C'])) {
+            $perm .= 'C';
+        } else {
+            $perm .= 'X';
+        }
+        if(isset($_POST[$module.'-M'])) {
+            $perm .= 'M';
+        } else {
+            $perm .= 'X';
+        }
+        if(isset($_POST[$module.'-D'])) {
+            $perm .= 'D';
+        } else {
+            $perm .= 'X';
+        }
+        $data[$module] = $perm;
+    }
+    $data['UserId'] = $_GET['UserId'];
+    $result = $prModel->update($data);
+    echo $result;
+    if($result == 'success') {
+        $updateSuccess = true;
+    } else if($result == 'duplicate') {
+        $duplicate = true;
+    } else {
+        $error = true;
+    }
+}
 if (isset($_GET['UserId'])) {
     $editFlag = true;
-
     $editData = $prModel->findById($_GET['UserId']);
-
     if ($editData != NULL) {
         $pDepartment =  $editData['Department'];
         $pDesignation =  $editData['Designation'];
@@ -34,26 +72,6 @@ if (isset($_GET['UserId'])) {
         $pClient =  $editData['Client'];
         $pAdmin =  $editData['Admin'];
     }
-
-}
-
-if (isset($_POST['submitP'])) {
-    // if(
-    //     !isset($_POST['Name'])
-    // ) {
-    //     exit("invalid input");
-    // }
-    // $desgModel = new DesgModel($conn);
-    // $result = $desgModel->insert($_POST);
-    // if($result == 'success'){
-    //     $desgAdded = true;
-    // } 
-    // elseif($result == 'duplicate') {
-    //     $duplicate = true;
-    // }
-    // else {
-    //     $error = true;
-    // }
 }
 
 $moduleData = [
@@ -67,21 +85,37 @@ $moduleData = [
     'Admin' => $pAdmin,
 ];
 
-var_dump($moduleData);
-
 ?>
 <h2 class="ps-2">Give Permission</h2>
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 col-md-8 align-self-center">
+        <?php if($updateSuccess): ?>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            Permissions updated succesfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php elseif($duplicate): ?>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            Permissions not updated, duplicate entry!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php elseif($error): ?>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            Permissions cannot be updated due to some error/invalid entry!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php endif; ?>
         <form id="select-emp" class="border rounded p-2 border-light mb-3" method="GET">
             <div class="mb-3">
                 <label for="name-input" class="col-form-label">Select Employee</label>
                 <select class="select2 form-control" data-allow-clear="true" onchange="submitEmp(this.value)">
                     <option value="" <?= isset($_GET['UserId']) ? '':'selected' ?> disabled>Select Employee</option>
-                <?php foreach($users as $user): ?>
+                    <?php foreach($users as $user): ?>
+                    <?php if($user['Id'] != $_SESSION['UserId']): ?>
                     <option value="<?= $user['Id'] ?>" <?= (isset($_GET['UserId']) && $user['Id'] == $_GET['UserId']) ? 'selected':'' ?>><?= $user['Name'] ?></option>
-                <?php endforeach; ?>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </form>
@@ -97,30 +131,32 @@ var_dump($moduleData);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                        $modules = ['Department', 'Designation', 'User', 'Payroll', 'Project', 'Leaves', 'Client', 'Admin'];
-                    ?>
                     <?php foreach($modules as $module): ?>
                     <tr>
                         <td><?= $module ?></td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="<?= $moduleData[$module][0] != 'X' ? 'true' : 'false' ?>" />
+                            <input name="<?= $module ?>-V" class="form-check-input" type="checkbox"
+                                <?= $moduleData[$module][0] !== 'X' ? 'checked' : '' ?> />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="<?= $moduleData[$module][1] != 'X' ? 'true' : 'false' ?>" />
+                            <input name="<?= $module ?>-C" class="form-check-input" type="checkbox"
+                                <?= $moduleData[$module][1] !== 'X' ? 'checked' : '' ?> />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="<?= $moduleData[$module][2] != 'X' ? 'true' : 'false' ?>" />
+                            <input name="<?= $module ?>-M" class="form-check-input" type="checkbox"
+                                <?= $moduleData[$module][2] !== 'X' ? 'checked' : '' ?> />
                         </td>
                         <td>
-                            <input class="form-check-input" type="checkbox" value="<?= $moduleData[$module][3] != 'X' ? 'true' : 'false' ?>" />
+                            <input name="<?= $module ?>-D" class="form-check-input" type="checkbox"
+                                <?= $moduleData[$module][3] !== 'X' ? 'checked' : '' ?> />
                         </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
             <div class="d-flex flex-row-reverse">
-                <button type="submit" name="submitP" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>
+                <button type="submit" name="submitP" value="submit"
+                    class="btn rounded-pill me-2 btn-primary">Submit</button>
             </div>
         </form>
     </div>
@@ -129,7 +165,7 @@ var_dump($moduleData);
 <script>
     function submitEmp(val) {
         console.log('asdad');
-        window.location.href = '/addAdmin.php?UserId='+val;
+        window.location.href = '/addAdmin.php?UserId=' + val;
         // document.getElementById('select-emp').submit();
     }
 </script>

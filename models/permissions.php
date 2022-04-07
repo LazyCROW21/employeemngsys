@@ -42,6 +42,48 @@ class PermissionModel {
         return $data;
     }
 
+    public function update($data)
+    {
+        $updateList = '';
+        $paramType = '';
+        $insertData = array();
+        foreach($this->columns as $column) {
+            $updateList .= $column['name'].' = ?,';
+            $paramType .= $column['type'];
+            if(isset($data[$column['name']]) && $data[$column['name']] !== '') {
+                array_push($insertData, $data[$column['name']]);
+            } else {
+                if($column['required']) {
+                    return 'invalid';
+                } else {
+                    array_push($insertData, null);
+                }
+            }
+        }
+        
+        $paramType .= $this->primaryKey['type'];
+        array_push($insertData, $data[$this->primaryKey['name']]);
+        
+        $updateList[strlen($updateList)-1] = ' ';
+        $query = "UPDATE {$this->table} SET $updateList WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param($paramType, ...$insertData);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'success';
+    }
+
     public function insert($data)
     {
         $columnList = '(';

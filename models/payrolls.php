@@ -1,14 +1,14 @@
 <?php
-class UserModel {
+class PRModel {
     public $conn;
 
     private $table = "user";
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
-        [ 'name' => 'Name', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Email', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Phone', 'type' => 's', 'required' => true ],
-        [ 'name' => 'DateOfBirth', 'type' => 's', 'required' => true ],
+        [ 'name' => 'UserId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'Basic', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'HRA', 'type' => 'd', 'required' => true ],
+        [ 'name' => 'DA', 'type' => 'd', 'required' => true ],
         [ 'name' => 'Gender', 'type' => 's', 'required' => true ],
         [ 'name' => 'Address', 'type' => 's', 'required' => true ],
         [ 'name' => 'City', 'type' => 's', 'required' => true ],

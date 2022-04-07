@@ -7,6 +7,31 @@ $error = false;
 $userModel = new UserModel($conn);
 $users = $userModel->findAll();
 
+$months = [
+    ['Id' => 1, 'Name' => 'January'],
+    ['Id' => 2, 'Name' => 'Febuary'],
+    ['Id' => 3, 'Name' => 'March'],
+    ['Id' => 4, 'Name' => 'April'],
+    ['Id' => 5, 'Name' => 'May'],
+    ['Id' => 6, 'Name' => 'June'],
+    ['Id' => 7, 'Name' => 'July'],
+    ['Id' => 8, 'Name' => 'August'],
+    ['Id' => 9, 'Name' => 'September'],
+    ['Id' => 10, 'Name' => 'October'],
+    ['Id' => 11, 'Name' => 'November'],
+    ['Id' => 12, 'Name' => 'December']
+];
+$currM = Date('m');
+$currY = Date('Y');
+
+$years = [
+    ['Id' => 2021, 'Name' => '2021'],
+    ['Id' => 2022, 'Name' => '2022'],
+    ['Id' => 2023, 'Name' => '2023'],
+    ['Id' => 2024, 'Name' => '2024'],
+    ['Id' => 2025, 'Name' => '2025']
+];
+
 if (isset($_POST['submitUser'])) {
     if(
         !isset($_POST['Name']) || !isset($_POST['Email']) ||
@@ -37,17 +62,17 @@ if (isset($_POST['submitUser'])) {
 <hr>
 <?php if($paymentDone): ?>
 <div class="alert alert-success alert-dismissible" role="alert">
-    User added succesfully!
+    Pay slip generate succesfully!
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <?php elseif($duplicate): ?>
 <div class="alert alert-warning alert-dismissible" role="alert">
-    User not added, duplicate entry!
+    Duplicate entry!
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <?php elseif($error): ?>
 <div class="alert alert-danger alert-dismissible" role="alert">
-    User cannot be added due to some error/invalid entry!
+    Pay slip cannot be generate due to some error/invalid entry!
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <?php endif; ?>
@@ -59,7 +84,9 @@ if (isset($_POST['submitUser'])) {
         <div class="row">
             <div class="col-6 col-md-6">
                 <label for="emp-select" class="col-form-label">Select Employee</label>
-                <select id="emp-select" name="UserId" class="select2 form-control" data-allow-clear="true" required>
+                <select id="emp-select" name="UserId" class="select2 form-control" data-allow-clear="true"
+                    onchange="getUserDetails(this.value)" required>
+                    <option selected disabled>Select an Employee</option>
                     <?php foreach($users as $user): ?>
                     <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
                     <?php endforeach; ?>
@@ -67,29 +94,39 @@ if (isset($_POST['submitUser'])) {
             </div>
             <div class="col-6 col-md-6">
                 <label for="emp-id" class="col-form-label">Employee Id</label>
-                <input id="emp-id" type="text" class="form-control" value="101" disabled />
+                <input id="emp-id" type="text" class="form-control" disabled />
             </div>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label for="email-input" class="col-form-label">Email</label>
-            <input class="form-control" type="email" value="john@example.com" id="email-input" disabled />
+            <input class="form-control" type="email" id="emp-email" disabled />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Phone</label>
-            <input class="form-control" type="text" value="1233211230" pattern="^\d{10}" maxlength="10" disabled />
+            <input class="form-control" type="text" id="emp-phone" disabled />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col-12 col-md-6">
+            <label class="col-form-label">Department</label>
+            <input class="form-control" type="text" value="" id="emp-dept" disabled />
+        </div>
+        <div class="col-12 col-md-6">
+            <label class="col-form-label">Designation</label>
+            <input class="form-control" type="text" id="emp-desg" disabled />
         </div>
     </div>
     <hr />
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
             <label class="col-form-label">PAN</label>
-            <input class="form-control" type="text" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" value="ASDFG1234Q" disabled />
+            <input class="form-control" type="text" id="emp-pan" disabled />
         </div>
         <div class="col-12 col-md-6">
             <label class="col-form-label">Bank Acount Number</label>
-            <input class="form-control" type="text" maxlength="18" pattern="^\d{9,18}$" value="123456789" disabled />
+            <input class="form-control" type="text" maxlength="18" id="emp-ban" disabled />
         </div>
     </div>
     <div class="divider">
@@ -97,36 +134,63 @@ if (isset($_POST['submitUser'])) {
     </div>
     <div class="mb-3 row">
         <div class="col-12 col-md-6">
+            <label id="month-select" class="col-form-label">Month</label>
+            <select id="month-select" name="Month" class="select2 form-control" data-allow-clear="true" required>
+                <?php foreach($months as $month): ?>
+                <option value="<?= $month['Id'] ?>" <?= $currM == $month['Id'] ? 'selected' : '' ?>>
+                    <?= $month['Name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-12 col-md-6">
+            <label for="year-select" class="col-form-label">Year</label>
+            <select id="year-select" name="Month" class="select2 form-control" data-allow-clear="true" required>
+                <?php foreach($years as $year): ?>
+                <option value="<?= $year['Id'] ?>" <?= $currY == $year['Id'] ? 'selected' : '' ?>><?= $year['Name'] ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <div class="col-12 col-md-6">
             <p class="text-center"><strong>Earning</strong></p>
             <table class="table table-borderless">
-                <tbody class="payslip-t">
+                <tbody id="earningSide" class="payslip-t">
                     <tr>
                         <td>Basic</td>
-                        <td><input name="Basic" type="number" class="form-control text-end" value="50000" min="0" step="0.01" required /></td>
+                        <td><input name="Basic" type="number" class="form-control text-end" value="50000" min="0"
+                                step="0.01" oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>House Rent Allowance</td>
-                        <td><input name="HRA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="HRA" type="number" class="form-control text-end" value="500" min="0"
+                                step="0.01" oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Dearness Allowance</td>
-                        <td><input name="DA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="DA" type="number" class="form-control text-end" value="500" min="0" step="0.01"
+                                oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Travelling Allowance</td>
-                        <td><input name="TA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="TA" type="number" class="form-control text-end" value="500" min="0" step="0.01"
+                                oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Medical Allowance</td>
-                        <td><input name="MA" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="MA" type="number" class="form-control text-end" value="500" min="0" step="0.01"
+                                oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Bonus</td>
-                        <td><input name="Bonus" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="Bonus" type="number" class="form-control text-end" value="500" min="0"
+                                step="0.01" oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Overtime</td>
-                        <td><input name="Overtime" type="number" class="form-control text-end" value="500" min="0" step="0.01" required /></td>
+                        <td><input name="Overtime" type="number" class="form-control text-end" value="500" min="0"
+                                step="0.01" oninput="update()" required /></td>
                     </tr>
                 </tbody>
             </table>
@@ -134,21 +198,25 @@ if (isset($_POST['submitUser'])) {
         <div class="col-12 col-md-6">
             <p class="text-center"><strong>Deductions</strong></p>
             <table class="table table-borderless">
-                <tbody class="payslip-t">
+                <tbody class="payslip-t" id="dedcSide">
                     <tr>
                         <td>Income Tax</td>
-                        <td><input name="IncomeTax" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
+                        <td><input name="IncomeTax" type="number" class="form-control text-end" value="400" min="0"
+                                step="0.01" oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Professional Tax</td>
-                        <td><input name="ProfessionalTax" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
+                        <td><input name="ProfessionalTax" type="number" class="form-control text-end" value="400"
+                                min="0" step="0.01" oninput="update()" required /></td>
                     </tr>
                     <tr>
                         <td>Provident Fund</td>
-                        <td><input name="PF" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
+                        <td><input name="PF" type="number" class="form-control text-end" value="400" min="0" step="0.01"
+                                oninput="update()" required /></td>
                     </tr>
                     <td>Employees' State Insurance</td>
-                    <td><input name="ESI" type="number" class="form-control text-end" value="400" min="0" step="0.01" required /></td>
+                    <td><input name="ESI" type="number" class="form-control text-end" value="400" min="0" step="0.01"
+                            oninput="update()" required /></td>
                     </tr>
                 </tbody>
             </table>
@@ -161,19 +229,19 @@ if (isset($_POST['submitUser'])) {
                     <td>
                         <strong>Total Earning:</strong>
                     </td>
-                    <td>60000</td>
+                    <td id="totalEarn"></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Total Deductions:</strong>
                     </td>
-                    <td>20000</td>
+                    <td id="totalDedc"></td>
                 </tr>
                 <tr>
                     <td>
                         <strong>NET Pay:</strong>
                     </td>
-                    <td>40000</td>
+                    <td id="netPay"></td>
                 </tr>
             </tbody>
         </table>
@@ -185,4 +253,49 @@ if (isset($_POST['submitUser'])) {
 </form>
 
 <script>
+    function getUserDetails(id) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("GET", "/api/user.php?Id=" + id, true);
+        xhttp.send();
+    }
+
+    function update() {
+        setTotalEarn();
+        setTotalDedc();
+        setNetPay();
+    }
+
+    function setTotalEarn() {
+        var te = document.getElementById('totalEarn');
+        var es = document.getElementById('earningSide').getElementsByTagName('input');
+        var totalEarn = 0;
+        for (let i = 0; i < es.length; i++) {
+            totalEarn += parseFloat(es[i].value);
+        }
+        te.innerHTML = totalEarn.toFixed(2);
+    }
+
+    function setTotalDedc() {
+        var td = document.getElementById('totalDedc');
+        var ds = document.getElementById('dedcSide').getElementsByTagName('input');
+        var totalDedc = 0;
+        for (let i = 0; i < ds.length; i++) {
+            totalDedc += parseFloat(ds[i].value);
+        }
+        td.innerHTML = totalDedc.toFixed(2);
+    }
+
+    function setNetPay() {
+        var np = document.getElementById('netPay');
+        var te = document.getElementById('totalEarn');
+        var td = document.getElementById('totalDedc');
+        np.innerHTML = (parseFloat(te.innerHTML) - parseFloat(td.innerHTML)).toFixed(2);
+    }
+
+    update();
 </script>

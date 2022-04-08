@@ -37,13 +37,13 @@ class LeaveModel {
     }
 
     public function findPastLeaves() {
-        $sql = "SELECT leaves.Id, leaves.StartedAt, leaves.EndedAt, leaves.LeaveType, leaves.EffectOnPay, leaves.Reason, leaves.Status, leaves.RespondedBy, leaves.RespondedAt, leaves.CreatedAt, user.Name FROM leaves JOIN user ON user.Id = leaves.UserId WHERE Status != 'Pending'";
+        $sql = "SELECT leaves.Id, leaves.StartedAt, leaves.EndedAt, leaves.LeaveType, leaves.EffectOnPay, leaves.Reason, leaves.Status, leaves.RespondedBy, leaves.RespondedAt, leaves.CreatedAt, user.Name FROM {$this->table} JOIN user ON user.Id = leaves.UserId WHERE Status != 'Pending'";
         // $sql = "SELECT * FROM {$this->table} WHERE Status != 'Pending'";
         return $this->conn->query($sql);
     }
 
     public function findPastLeavesByUserId($userId) {
-        $sql = "SELECT * FROM {$this->table} WHERE UserId = $userId AND Status != 'Pending'";
+        $sql = "SELECT L.Id AS Id, L.StartedAt AS StartedAt, L.StartHalf AS StartHalf, L.EndHalf AS EndHalf, L.EndedAt AS EndedAt, L.LeaveType AS LeaveType, L.EffectOnPay AS EffectOnPay, L.Reason AS Reason, L.Status AS Status, L.RespondedBy AS RespondedBy, L.RespondedAt AS RespondedAt, L.CreatedAt AS CreatedAt, U.Name AS RespondedByName FROM {$this->table} L JOIN user U ON U.Id = L.RespondedBy";
         return $this->conn->query($sql);
     }
 

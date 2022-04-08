@@ -38,7 +38,7 @@ class DesgModel {
                 if($column['required']) {
                     return 'invalid';
                 } else {
-                    array_push($insertData, null);
+                    array_push($insertData, NULL);
                 }
             }
         }
@@ -86,60 +86,36 @@ class DesgModel {
 
     public function update($data)
     {
-        $columnList = '(';
-        $params = '(';
-        $paramType = '';
+        $columnNames = "";
+        $paramType = "";
         $insertData = array();
         foreach($this->columns as $column) {
-            $columnList .= $column['name'].',';
-            $params .= '?,';
+            $columnNames .= " ".$column['name']." = ?,";
             $paramType .= $column['type'];
-            if(isset($data[$column['name']]) && $data[$column['name']] !== '') {
+            if(isset($data[$column['name']]) && trim($data[$column['name']]) !== '') {
                 array_push($insertData, $data[$column['name']]);
             } else {
                 if($column['required']) {
                     return 'invalid';
                 } else {
-                    array_push($insertData, null);
+                    array_push($insertData, NULL);
                 }
             }
         }
         
         if($this->updatedAt) {
-            $columnList .= $this->updatedAt['name'].',';
-            $params .= '?,';
+            $columnNames .= " ".$this->updatedAt['name']." = ? ";
             $paramType .= $this->updatedAt['type'];
             array_push($insertData, Date('Y-m-d'));
         }
 
-        if($this->deletedAt) {
-            $columnList .= $this->deletedAt['name'].',';
-            $params .= '?,';
-            $paramType .= $this->deletedAt['type'];
-            array_push($insertData, null);
-        }
-        
         $paramType .= $this->primaryKey['type'];
-        array_push($insertData, trim($data['id']));
-
-        $columnList[strlen($columnList)-1] = ')';
-        $params[strlen($params)-1] = ')';
+        array_push($insertData, trim($data['Id']));
 
         // $query = "UPDATE {$this->table} SET $columnList VALUES $params WHERE {$this->primaryKey['name']} = ?";
         $query = "UPDATE {$this->table} SET ";
-
-        $arrayLength = sizeof($this->columns)+2;
-
-        for ($i = 0; $i < $arrayLength; $i++) {
-            if ($i == $arrayLength - 1) {
-                $query .= " ".$columnList[$i].", ".$params[$i];
-            }
-            else {
-                $query .= " ".$columnList[$i].", ".$params[$i]." ,";
-            }
-        }
-
-        $query = " WHERE {$this->primaryKey['name']} = ?";
+        $query .= $columnNames;
+        $query .= " WHERE {$this->primaryKey['name']} = ?";
         
         
 

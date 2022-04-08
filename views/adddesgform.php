@@ -15,25 +15,7 @@ $editPk = "";
 
 $editFlag = false;
 
-if (isset($_GET['edit'])) {
-    $editFlag = true;
-    echo $_GET['edit'];
-    $id = $_GET['edit'];
 
-    $designationModel = new DesgModel($conn);
-    $editData = $designationModel->getDesignationById($id);
-
-    if ($editData != NULL) {
-
-        $editDept =  $editData['Department'];
-        $editDesignation =  $editData['Designation'];
-        $editPk = $editData['Id'];
-    }
-
-    echo $editData['Department']."<br>";
-        echo  $editData['Designation'];
-
-}
 
 if (isset($_POST['submitDesg'])) {
     if(
@@ -59,12 +41,12 @@ if (isset($_POST['submitDesg'])) {
         else {
             $error = true;
         }
-        echo "create req received!";
+        // echo "create req received!";
 
     }
     else if (trim($_POST['type']) == "edit") {
-        echo "Edit req received!<br>";
-        echo $_POST['id'];
+        // echo "Edit req received!<br>";
+        // echo $_POST['Id'];
 
         $result = $desgModel->update($_POST);
         if($result == 'success'){
@@ -75,9 +57,30 @@ if (isset($_POST['submitDesg'])) {
         }
     }
     else {
-        echo "no req received!";
+        // echo "no req received!";
 
     }
+
+}
+
+
+if (isset($_GET['edit'])) {
+    $editFlag = true;
+    // echo $_GET['edit'];
+    $id = $_GET['edit'];
+
+    $designationModel = new DesgModel($conn);
+    $editData = $designationModel->getDesignationById($id);
+
+    if ($editData != NULL) {
+
+        $editDept =  $editData['Department'];
+        $editDesignation =  $editData['Designation'];
+        $editPk = $editData['Id'];
+    }
+
+    // echo $editData['Department']."<br>";
+        // echo  $editData['Designation'];
 
 }
 ?>
@@ -119,14 +122,14 @@ if (isset($_POST['submitDesg'])) {
                 <?php else: ?>create<?php endif; ?>
             ">
 
-            <input type="hidden" name="id" value="
+            <input type="hidden" name="Id" value="
                 <?php if(isset($_GET['edit'])): ?><?= $editPk ?>
                 <?php else: ?> <?php endif; ?>
             ">
 
             <div class="mb-3">
                 <label for="dept-select" class="col-form-label">Select Department</label>
-                <select name="DepartmentId" id="dept-select" class="select2 form-control" data-allow-clear="true">
+                <select name="DepartmentId" id="dept-select" class="select2 form-control" data-allow-clear="true" <?php if ($editFlag): ?> disabled <?php endif; ?> >
                 <?php foreach($departments as $department): ?>
                     <option
                         <?php if ($editFlag && $department['Name'] == $editDept): ?>

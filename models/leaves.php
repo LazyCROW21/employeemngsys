@@ -32,7 +32,7 @@ class LeaveModel {
     }
 
     public function findPendingLeaves() {
-        $sql = "SELECT * FROM {$this->table} JOIN user ON user.Id = leaves.UserId  WHERE Status = 'Pending'";
+        $sql = "SELECT L.Id AS Id, L.UserId AS UserId, L.StartedAt AS StartedAt, L.StartHalf AS StartHalf, L.EndedAt AS EndedAt, L.EndHalf AS EndHalf, L.LeaveType AS LeaveType, L.EffectOnPay AS EffectOnPay, L.Reason AS Reason, L.Status AS Status, L.CreatedAt AS CreatedAt, U.Name AS UserName, U.Id as UserId FROM {$this->table} L JOIN user U ON U.Id = L.UserId WHERE Status = 'Pending'";
         return $this->conn->query($sql);
     }
 
@@ -106,5 +106,26 @@ class LeaveModel {
             return 'error';
         }
         return 'success';
+    }
+
+    public function reviewLeave($data, $operation) {
+        $curDT = Date('Y-m-d');
+        $query = "UPDATE {$this->table} SET RespondedBy = ?, RespondedAt = '$curDT', Status = '$operation', UpdatedAt = '$curDT' WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ii', $data['RespondedBy'], $data['Id']);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return false;
+        }
+        $stmt->close();
+        if(!$result) {
+            return false;
+        }
+        return true;
     }
 };

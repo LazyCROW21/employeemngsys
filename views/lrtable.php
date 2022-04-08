@@ -140,7 +140,7 @@ $rows = $leaveModel->findPastLeavesByUserId($_SESSION['UserId']);
 <script>
   function setModal(id) {
     var row = document.getElementById('lr-' + id);
-    var items = [ 'Status', 'StartedAt', 'StartHalf', 'EndedAt', 'EndHalf', 'LeaveType', 'EffectOnPay', 'Reason', 'Status', 'RespondedByName', 'RespondedAt', 'CreatedAt' ];
+    var items = [ 'Status', 'StartedAt', 'StartHalf', 'EndedAt', 'EndHalf', 'LeaveType', 'EffectOnPay', 'Reason', 'RespondedByName', 'RespondedAt', 'CreatedAt' ];
     for(let i=0; i<items.length; i++) {
       document.getElementById('m'+items[i]).innerText = row.getAttribute('data-'+items[i]);
     }

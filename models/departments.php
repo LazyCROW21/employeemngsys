@@ -81,4 +81,71 @@ class DeptModel {
         }
         return 'success';
     }
+
+    public function update($data)
+    {
+        $columnNames = "";
+        $paramType = "";
+        $insertData = array();
+        foreach($this->columns as $column) {
+            $columnNames .= " ".$column['name']." = ?,";
+            $paramType .= $column['type'];
+            if(isset($data[$column['name']]) && trim($data[$column['name']]) !== '') {
+                array_push($insertData, $data[$column['name']]);
+            } else {
+                if($column['required']) {
+                    return 'invalid';
+                } else {
+                    array_push($insertData, NULL);
+                }
+            }
+        }
+        
+        if($this->updatedAt) {
+            $columnNames .= " ".$this->updatedAt['name']." = ? ";
+            $paramType .= $this->updatedAt['type'];
+            array_push($insertData, Date('Y-m-d'));
+        }
+
+        $paramType .= $this->primaryKey['type'];
+        array_push($insertData, trim($data['Id']));
+
+        // $query = "UPDATE {$this->table} SET $columnList VALUES $params WHERE {$this->primaryKey['name']} = ?";
+        $query = "UPDATE {$this->table} SET ";
+        $query .= $columnNames;
+        $query .= " WHERE {$this->primaryKey['name']} = ?";
+        
+        
+
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param($paramType, ...$insertData);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'success';
+    }
+
+    public function getDepartmentById($id) {
+        $sql = $this->conn->prepare("SELECT * FROM {$this->table} WHERE Id = ?");
+        
+        $sql->bind_param('i', $id);
+
+        $sql->execute();
+        $result = $sql->get_result();
+        $row = $result->fetch_assoc();
+        $sql->close();
+
+        return $row;
+
+    }
 };

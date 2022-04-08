@@ -17,6 +17,7 @@ $rows = $leaveModel->findPastLeavesByUserId($_SESSION['UserId']);
         <th>Effect On Pay</th>
         <th>From</th>
         <th>To</th>
+        <th>Status</th>
         <th></th>
       </tr>
     </thead>
@@ -42,10 +43,19 @@ $rows = $leaveModel->findPastLeavesByUserId($_SESSION['UserId']);
         data-RespondedByName="<?= $row['RespondedByName'] ?>"
       >
         <td><?= $count++ ?></td>
-        <td class="text-start"><?= $row['LeaveType'] ?></td>
+        <td><?= $row['LeaveType'] ?></td>
         <td><?= $row['EffectOnPay'] ?></td>
         <td><?= substr($row['StartedAt'], 0, 10) ?></td>
         <td><?= substr($row['EndedAt'], 0, 10) ?></td>
+        <td>
+          <?php if($row['Status'] == 'Rejected'): ?>
+          <span class="badge bg-label-danger me-1">Rejected</span>
+          <?php elseif($row['Status'] == 'Approved'): ?>
+          <span class="badge bg-label-success me-1">Approved</span>
+          <?php else: ?>
+          <span class="badge bg-label-secondary me-1">Pending</span>
+          <?php endif; ?>
+        </td>
         <td>
           <div class="action-btn dropdown dropstart">
             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i

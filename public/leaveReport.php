@@ -54,6 +54,8 @@
 
     <!-- Custom CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+
     <style>
       .select2-selection {
         height: 2.3rem !important;
@@ -61,8 +63,8 @@
       }
       .select2-container{
         width: 100%!important;
-    }
-        .select2-search--dropdown .select2-search__field {
+      }
+      .select2-search--dropdown .select2-search__field {
         width: 98%;
         }
       .action-btn {
@@ -131,6 +133,8 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <!-- Custom Page JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
       $(document).ready(function () {

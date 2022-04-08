@@ -4,6 +4,8 @@ require_once "../config/dbconfig.php";
 
 $pmModel = new PermissionModel($conn);
 
+$modules = ['Department', 'Designation', 'User', 'Payroll', 'Project', 'Leaves', 'Client', 'Admin'];
+
 $rows = $pmModel->findAll();
 
 function countPermission($data) {
@@ -41,7 +43,7 @@ function countPermission($data) {
 <hr>
 <!-- table-responsive -->
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
-    <table class="table table-hover border-top text-center" id="projecttable">
+    <table class="table table-hover border-top text-center" id="permissiontable">
         <thead>
             <tr>
                 <th>#</th>
@@ -59,7 +61,7 @@ function countPermission($data) {
             ?>
             <?php if($rows): ?>
             <?php foreach ($rows as $row) : ?>
-            <tr>
+            <tr id="pr-<?= $row['UserId'] ?>" data-up="<?= urlencode(json_encode($row)) ?>">
                 <td><?= $count++ ?></td>
                 <td class="text-start"><?= $row['Name'] ?></td>
                 <td><?= $row['DepartmentName'] ?></td>
@@ -70,12 +72,10 @@ function countPermission($data) {
                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
                                 class="bx bx-dots-vertical-rounded"></i></button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                    class="bx bx-detail me-2"></i>Details</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i
+                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#pModal" onclick="setModal(<?= $row['UserId'] ?>)"><i
+                                    class="bx bx-detail me-2"></i>Details</button>
+                            <a class="dropdown-item" href="/addAdmin.php?UserId=<?= $row['UserId'] ?>"><i
                                     class="bx bx-edit-alt me-2"></i>Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                    class="bx bx-trash me-2"></i>Delete</a>
                         </div>
                     </div>
                 </td>
@@ -85,3 +85,69 @@ function countPermission($data) {
         </tbody>
     </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="pModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="mTitle"></span>'s Permissions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>Permission</th>
+                            <th>VIEW</th>
+                            <th>CREATE</th>
+                            <th>MODIFY</th>
+                            <th>DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($modules as $module): ?>
+                        <tr>
+                            <td><?= $module ?></td>
+                            <td>
+                                <input id="<?= $module ?>-V" class="form-check-input" type="checkbox" disabled />
+                            </td>
+                            <td>
+                                <input id="<?= $module ?>-C" class="form-check-input" type="checkbox" disabled />
+                            </td>
+                            <td>
+                                <input id="<?= $module ?>-M" class="form-check-input" type="checkbox" disabled />
+                            </td>
+                            <td>
+                                <input id="<?= $module ?>-D" class="form-check-input" type="checkbox" disabled />
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                <a id="mEdit" type="button" class="btn btn-primary" href="#">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setModal(id) {
+        var row = document.getElementById('pr-'+id);
+        var data = JSON.parse(decodeURIComponent(row.getAttribute('data-up')));
+        document.getElementById('mTitle').innerText = data['Name'].replace(/\+/g, ' ');
+        document.getElementById('mEdit').href = '/addAdmin.php?UserId='+id;
+        
+        var modules = ['Department', 'Designation', 'User', 'Payroll', 'Project', 'Leaves', 'Client', 'Admin'];
+        var subModules = ['V', 'C', 'M', 'D'];
+        for(let i=0; i<modules.length; i++) {
+            for(let j=0; j<4; j++) {
+                document.getElementById(modules[i]+'-'+subModules[j]).checked = (data[modules[i]][j] != 'X');
+            }
+        }
+
+    }
+</script>

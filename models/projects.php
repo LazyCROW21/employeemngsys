@@ -54,7 +54,7 @@ class ProjectModel {
             $columnList .= $this->createdBy['name'].',';
             $params .= '?,';
             $paramType .= $this->createdBy['type'];
-            array_push($insertData, 1);
+            array_push($insertData, $data[$this->createdBy['name']]);
         }
         if($this->createdAt) {
             $columnList .= $this->createdAt['name'].',';

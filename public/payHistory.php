@@ -66,6 +66,7 @@
     <script src="/assets/js/config.js"></script>
 
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
       .select2-selection {
@@ -144,10 +145,12 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <!-- Custom Page JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
     $(document).ready(function () {
-        $('#clienttable').DataTable({});
+        $('#paytable').DataTable({});
       });
     </script>
 </html>

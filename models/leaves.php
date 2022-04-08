@@ -5,7 +5,7 @@ class LeaveModel {
     private $table = "leaves";
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
-        [ 'name' => 'Id', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'UserId', 'type' => 'i', 'required' => true ],
         [ 'name' => 'StartedAt', 'type' => 's', 'required' => true ],
         [ 'name' => 'StartHalf', 'type' => 's', 'required' => true ],
         [ 'name' => 'EndedAt', 'type' => 's', 'required' => true ],
@@ -32,12 +32,12 @@ class LeaveModel {
     }
 
     public function findPendingLeaves() {
-        $sql = "SELECT * FROM {$this->table} JOIN user ON user.Id = leaves.EmployeeId  WHERE Status = 'Pending'";
+        $sql = "SELECT * FROM {$this->table} JOIN user ON user.Id = leaves.UserId  WHERE Status = 'Pending'";
         return $this->conn->query($sql);
     }
 
     public function findPastLeaves() {
-        $sql = "SELECT leaves.Id, leaves.StartedAt, leaves.EndedAt, leaves.LeaveType, leaves.EffectOnPay, leaves.Reason, leaves.Status, leaves.RespondedBy, leaves.RespondedOn, leaves.CreatedAt, user.Name FROM leaves JOIN user ON user.Id = leaves.EmployeeId WHERE Status != 'Pending'";
+        $sql = "SELECT leaves.Id, leaves.StartedAt, leaves.EndedAt, leaves.LeaveType, leaves.EffectOnPay, leaves.Reason, leaves.Status, leaves.RespondedBy, leaves.RespondedAt, leaves.CreatedAt, user.Name FROM leaves JOIN user ON user.Id = leaves.UserId WHERE Status != 'Pending'";
         // $sql = "SELECT * FROM {$this->table} WHERE Status != 'Pending'";
         return $this->conn->query($sql);
     }
@@ -67,7 +67,7 @@ class LeaveModel {
                 }
             }
         }
-
+        
         if($this->createdAt) {
             $columnList .= $this->createdAt['name'].',';
             $params .= '?,';

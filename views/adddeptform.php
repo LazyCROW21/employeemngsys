@@ -47,15 +47,11 @@ if (isset($_POST['submitDept'])) {
             $error = true;
         }
     }
-    else {}
-
-
 }
 
 
 if (isset($_GET['edit'])) {
     $editFlag = true;
-    // echo $_GET['edit'];
     $id = $_GET['edit'];
 
     $departmentModel = new DeptModel($conn);
@@ -66,11 +62,8 @@ if (isset($_GET['edit'])) {
         $editDept =  $editData['Name'];
         $editPk = $editData['Id'];
     }
-
-    // echo $editData['Name']."<br>";
-    
-
 }
+
 ?>
 <h2 class="ps-2">
     <?php if ($editFlag): ?>

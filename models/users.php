@@ -31,12 +31,29 @@ class UserModel {
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT ";
+        $sql .= "U.Id AS Id, U.Name AS Name, U.Email AS Email, U.Phone AS Phone, U.DateOfBirth AS DateOfBirth,";
+        $sql .= " U.Gender AS Gender, U.Address AS Address, U.City AS City, U.State AS State, U.Basic AS Basic,";
+        $sql .= " U.DateOfJoining AS DateOfJoining, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId,";
+        $sql .= " U.PAN AS PAN, U.BAN AS BAN, U.CreatedBy AS CreatedBy, U.CreatedAt AS CreatedAt, U.DeletedAt AS DeletedAt,";
+        $sql .= " DP.Name AS DepartmentName, DG.Name AS DesignationName";
+        $sql .= " FROM {$this->table} U";
+        $sql .= " INNER JOIN department DP ON DP.Id = U.DepartmentId";
+        $sql .= " INNER JOIN designation DG ON DG.Id = U.DesignationId";
         return $this->conn->query($sql);
     }
 
     public function findAllActive() {
-        $sql = "SELECT * FROM {$this->table} WHERE {$this->deletedAt['name']} IS NULL";
+        $sql = "SELECT";
+        $sql .= " U.Id AS Id, U.Name AS Name, U.Email AS Email, U.Phone AS Phone, U.DateOfBirth AS DateOfBirth,";
+        $sql .= " U.Gender AS Gender, U.Address AS Address, U.City AS City, U.State AS State, U.Basic AS Basic,";
+        $sql .= " U.DateOfJoining AS DateOfJoining, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId,";
+        $sql .= " U.PAN AS PAN, U.BAN AS BAN, U.CreatedBy AS CreatedBy, U.CreatedAt AS CreatedAt, U.DeletedAt AS DeletedAt,";
+        $sql .= " DP.Name AS DepartmentName, DG.Name AS DesignationName";
+        $sql .= " FROM {$this->table} U";
+        $sql .= " INNER JOIN department DP ON DP.Id = U.DepartmentId";
+        $sql .= " INNER JOIN designation DG ON DG.Id = U.DesignationId";
+        $sql .= " WHERE U.{$this->deletedAt['name']} IS NULL";
         return $this->conn->query($sql);
     }
 

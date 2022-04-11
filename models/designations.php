@@ -23,7 +23,10 @@ class DesgModel {
     }
 
     public function findAllActive() {
-        $sql = "SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt, designation.DeletedAt FROM `designation` JOIN department ON designation.DepartmentId = department.Id WHERE 1 ORDER BY `department`.`Name` ASC , `designation`.`Name` ASC WHERE {$this->deletedAt['name']} IS NULL";
+        $sql = "SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt,";
+        $sql .= " designation.DepartmentId FROM `designation` JOIN department ON designation.DepartmentId = department.Id";
+        $sql .= " WHERE designation.{$this->deletedAt['name']} IS NULL";
+        $sql .= " ORDER BY `department`.`Name` ASC , `designation`.`Name` ASC";
         return $this->conn->query($sql);
     }
 
@@ -121,8 +124,6 @@ class DesgModel {
         $query = "UPDATE {$this->table} SET ";
         $query .= $columnNames;
         $query .= " WHERE {$this->primaryKey['name']} = ?";
-        
-        
 
         $result = true;
         try {

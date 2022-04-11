@@ -6,10 +6,15 @@ require_once "../config/dbconfig.php";
 $userAdded = false;
 $duplicate = false;
 $error = false;
+$editFlag = false;
+$userUpdate = false;
+$editUser = "";
+$editPk = "";
+
 $deptModel = new DeptModel($conn);
 $desgModel = new DesgModel($conn);
-$departments = $deptModel->findAll();
-$designations = $desgModel->findAll();
+$departments = $deptModel->findAllActive();
+$designations = $desgModel->findAllActive();
 
 $states = ['Andaman and Nicobar', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', ' Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli', 'Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka    ', 'Kerala', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Orissa', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
@@ -39,7 +44,20 @@ if (isset($_POST['submitUser'])) {
     else {
         $error = true;
     }
+} else if (isset($_GET['edit'])) {
+    $editFlag = true;
+    $id = $_GET['edit'];
+
+    $departmentModel = new DeptModel($conn);
+    $editData = $departmentModel->getDepartmentById($id);
+
+    if ($editData != NULL) {
+
+        $editDept =  $editData['Name'];
+        $editPk = $editData['Id'];
+    }
 }
+
 ?>
 <h2 class="ps-2">Add Staff</h2>
 <hr>

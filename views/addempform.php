@@ -46,6 +46,7 @@ if (isset($_POST['submitUser'])) {
         }
         else {
             $result = $userModel->insert($_POST);
+            $_POST['CreatedBy'] = $_SESSION['UserId'];
             if($result == 'success'){
                 $userAdded = true;
             } 
@@ -178,8 +179,7 @@ if (isset($_GET['edit'])) {
             </select>
         </div>
         <div class="col-12 col-md-6">
-            <select id="desg-select" class="select2 form-control" 
-            name="DesignationId" data-allow-clear="true"></select>
+            <select id="desg-select" class="select2 form-control" name="DesignationId" data-allow-clear="true"></select>
         </div>
     </div>
     <div class="mb-3 row">
@@ -223,6 +223,18 @@ function setDesg() {
         if(designations[i].deptId == deptSelect.value) {
             desgSelect.innerHTML += `<option value="${designations[i].id}">${designations[i].name}</option>`
         }
+    }
+}
+
+<?php if(isset($editUser['DesignationId'])): ?>
+var editDesg = <?= $editUser['DesignationId'] ?>;
+<?php else: ?>
+var editDesg = -1;
+<?php endif; ?>
+function setEditDesg() {
+    if(editDesg != -1) {
+        let desgSelect = document.getElementById('desg-select');
+        desgSelect.value = editDesg;
     }
 }
 </script>

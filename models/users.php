@@ -82,7 +82,7 @@ class UserModel {
 
     public function findById($id) { 
         $query = 
-        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, U.Address AS Address, U.Gender AS Gender, U.DateOfBirth AS DateOfBirth, U.City AS City, DEPT.Name AS Department, U.Basic AS Basic, U.PAN AS PAN, U.BAN AS BAN, U.Phone AS Phone, U.Email AS Email 
+        "SELECT U.Id AS Id, U.Name AS Name, U.DepartmentId AS DepartmentId, U.DesignationId AS DesignationId, DESG.Name As Designation, U.Address AS Address, U.Gender AS Gender, U.DateOfBirth AS DateOfBirth, U.City AS City, DEPT.Name AS Department, U.Basic AS Basic, U.PAN AS PAN, U.BAN AS BAN, U.State AS State, U.Phone AS Phone, U.DateOfJoining AS DateOfJoining, U.Email AS Email 
         FROM {$this->table} U 
         INNER JOIN designation DESG ON DESG.Id = U.DesignationId 
         INNER JOIN department DEPT ON DEPT.Id = U.DepartmentId 
@@ -128,7 +128,7 @@ class UserModel {
             $columnList .= $this->createdBy['name'].',';
             $params .= '?,';
             $paramType .= $this->createdBy['type'];
-            array_push($insertData, $data['CreatedBy']);
+            array_push($insertData, $data[$this->createdBy['name']]);
         }
 
         if($this->createdAt) {
@@ -180,7 +180,7 @@ class UserModel {
             $columnNames .= " ".$column['name']." = ?,";
             $paramType .= $column['type'];
             if(isset($data[$column['name']]) && trim($data[$column['name']]) !== '') {
-                array_push($insertData, $data[$column['name']]);
+                array_push($insertData, trim($data[$column['name']]));
             } else {
                 if($column['required']) {
                     return 'invalid';
@@ -199,13 +199,10 @@ class UserModel {
         $paramType .= $this->primaryKey['type'];
         array_push($insertData, trim($data[$this->primaryKey['name']]));
 
-        // $query = "UPDATE {$this->table} SET $columnList VALUES $params WHERE {$this->primaryKey['name']} = ?";
         $query = "UPDATE {$this->table} SET ";
         $query .= $columnNames;
         $query .= " WHERE {$this->primaryKey['name']} = ?";
         
-        
-
         $result = true;
         try {
             $stmt = $this->conn->prepare($query);

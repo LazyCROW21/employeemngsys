@@ -22,6 +22,11 @@ class DesgModel {
         return $this->conn->query($sql);
     }
 
+    public function findAllActive() {
+        $sql = "SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt, designation.DeletedAt FROM `designation` JOIN department ON designation.DepartmentId = department.Id WHERE 1 ORDER BY `department`.`Name` ASC , `designation`.`Name` ASC WHERE {$this->deletedAt['name']} IS NULL";
+        return $this->conn->query($sql);
+    }
+
     public function insert($data)
     {
         $columnList = '(';
@@ -152,6 +157,48 @@ class DesgModel {
 
         return $row;
 
+    }
+
+    function removeById($id) {
+        $currDate = Date('Y-m-d H:i:s');
+
+        $query = "UPDATE {$this->table} SET {$this->deletedAt['name']} = '$currDate'";
+        $query .= " WHERE {$this->primaryKey['name']} = ?";
+
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'deleted';
+    }
+
+    function removeByDept($id) {
+        $currDate = Date('Y-m-d H:i:s');
+
+        $query = "UPDATE {$this->table} SET {$this->deletedAt['name']} = '$currDate'";
+        $query .= " WHERE DepartmentId = ?";
+
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'deleted';
     }
 
 };

@@ -21,6 +21,11 @@ class DeptModel {
         return $this->conn->query($sql);
     }
 
+    public function findAllActive() {
+        $sql = "SELECT * FROM {$this->table} WHERE {$this->deletedAt['name']} IS NULL";
+        return $this->conn->query($sql);
+    }
+
     public function insert($data)
     {
         $columnList = '(';
@@ -147,5 +152,25 @@ class DeptModel {
 
         return $row;
 
+    }
+
+    function removeById($id) {
+        $currDate = Date('Y-m-d H:i:s');
+
+        $query = "UPDATE {$this->table} SET {$this->deletedAt['name']} = '$currDate'";
+        $query .= " WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'deleted';
     }
 };

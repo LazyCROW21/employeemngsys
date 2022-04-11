@@ -7,7 +7,7 @@ $duplicate = false;
 $desgUpdate = false;
 $error = false;
 $deptModel = new DeptModel($conn);
-$departments = $deptModel->findAll();
+$departments = $deptModel->findAllActive();
 
 $editDept = "";
 $editDesignation = "";

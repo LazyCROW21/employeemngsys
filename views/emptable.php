@@ -14,7 +14,8 @@
       <tr>
         <th>#</th>
         <th class="text-start">Name</th>
-        <th>Designation (Dept)</th>
+        <th>Designation</th>
+        <th>Department</th>
         <th>Phone</th>
         <th>Status</th>
         <th>Action</th>
@@ -29,7 +30,8 @@
       <tr id="ur-<?= $row['Id'] ?>" data-user="<?= htmlentities(json_encode($row)) ?>">
         <td><?= $count++ ?></td>
         <td class="text-start"><?= $row['Name'] ?></td>
-        <td><?= $row['DesignationId'] ?>(<?= $row['DepartmentId'] ?>)</td>
+        <td><?= $row['DesignationName'] ?></td>
+        <td><?= $row['DepartmentName'] ?></td>
         <td><?= $row['Phone'] ?></td>
         <td>
           <?php if($row['DeletedAt'] == null): ?>
@@ -45,7 +47,7 @@
             <div class="dropdown-menu">
               <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uModal" onclick="setModal(<?= $row['Id'] ?>)"><i class="bx bx-detail me-2"></i>Details</button>
               <?php if($row['DeletedAt'] == null): ?>
-              <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i>Edit</a>
+              <a class="dropdown-item" href="/addStaff.php?edit=<?= $row['Id'] ?>"><i class="bx bx-edit-alt me-2"></i>Edit</a>
               <button class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i>Delete</button>
               <?php endif; ?>
             </div>
@@ -102,8 +104,8 @@ $details = [
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                <a id="mEdit" type="button" class="btn btn-primary" href="#">Edit</a>
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+              <a id="mEdit" class="btn btn-primary" href="#">Edit</a>
             </div>
         </div>
     </div>
@@ -114,8 +116,12 @@ $details = [
     var row = document.getElementById('ur-'+id);
     var data = JSON.parse(row.getAttribute('data-user'));
     document.getElementById('mTitle').innerText = data['Name']+"'s Details";
-    document.getElementById('mEdit').href = '/addStaff.php?edit='+id;
-    console.log(data);
+    console.log(data['DeletedAt']);
+    if(null === data['DeletedAt']) {
+      document.getElementById('mEdit').href = '/addStaff.php?edit='+id;
+    } else {  
+      document.getElementById('mEdit').href = '#';
+    }
     let details = [
       'Id',
       'Name',

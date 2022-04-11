@@ -23,10 +23,12 @@ class DesgModel {
     }
 
     public function findAllActive() {
-        $sql = "SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt,";
-        $sql .= " designation.DepartmentId FROM `designation` JOIN department ON designation.DepartmentId = department.Id";
-        $sql .= " WHERE designation.{$this->deletedAt['name']} IS NULL";
-        $sql .= " ORDER BY `department`.`Name` ASC , `designation`.`Name` ASC";
+        $sql = "SELECT DG.Id AS Id, DP.Name AS DepartmentName, DG.Name AS Name,";
+        $sql .= " DG.CreatedAt AS CreatedAt, DG.DepartmentId AS DepartmentId";
+        $sql .= " FROM {$this->table} DG";
+        $sql .= " INNER JOIN department DP ON DG.DepartmentId = DP.Id";
+        $sql .= " WHERE DG.{$this->deletedAt['name']} IS NULL";
+        $sql .= " ORDER BY DP.Name ASC, DG.Name ASC";
         return $this->conn->query($sql);
     }
 
@@ -142,9 +144,6 @@ class DesgModel {
         }
         return 'success';
     }
-
-
-
 
     public function getDesignationById($id) {
         $sql = $this->conn->prepare("SELECT designation.Id, department.Name AS Department, designation.Name as Designation, designation.CreatedAt, designation.DeletedAt FROM `designation` JOIN department ON designation.DepartmentId = department.Id WHERE designation.Id = ?");

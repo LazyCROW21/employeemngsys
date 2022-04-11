@@ -71,7 +71,8 @@ if (isset($_GET['edit'])) {
     <?php else: ?>
         Add 
     <?php endif; ?>
-    Department</h2>
+    Department
+</h2>
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 col-md-6 align-self-center">

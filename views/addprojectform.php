@@ -87,7 +87,7 @@ if (isset($_POST['submitProject'])) {
             </div>
             <div class="mb-3">
                 <label for="name-input" class="col-form-label">Select Team <span class="text-muted">(Optional)</span></label>
-                <select name="Team" class="select2 form-control" multiple="multiple">
+                <select name="Team[]" class="select2 form-control" multiple="multiple">
                 <?php foreach($users as $user): ?>
                     <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
                 <?php endforeach; ?>

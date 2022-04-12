@@ -1,23 +1,14 @@
 <?php
-require_once 'projectEmp.php';
-
-class ProjectModel {
+class ProjectEmpModel {
     public $conn;
 
-    private $table = "project";
+    private $table = "project_emp";
     private $primaryKey = [ 'name' => 'Id', 'type' => 'i', 'required' => true ];
     private $columns = [
-        [ 'name' => 'Title', 'type' => 's', 'required' => true ],
-        [ 'name' => 'ClientId', 'type' => 'i', 'required' => false ],
-        [ 'name' => 'LeadId', 'type' => 'i', 'required' => true ],
-        [ 'name' => 'Description', 'type' => 's', 'required' => true ],
-        [ 'name' => 'Earning', 'type' => 'd', 'required' => false ],
-        [ 'name' => 'Deadline', 'type' => 's', 'required' => false ],
-        [ 'name' => 'StartedAt', 'type' => 's', 'required' => false ],
-        [ 'name' => 'Completed', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'ProjectId', 'type' => 'i', 'required' => true ],
+        [ 'name' => 'UserId', 'type' => 'i', 'required' => true ],
     ];
     
-    private $createdBy = [ 'name' => 'CreatedBy', 'type' => 'i', 'required' => true ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -81,21 +72,34 @@ class ProjectModel {
         $params[strlen($params)-1] = ')';
         $query = "INSERT INTO {$this->table} $columnList VALUES $params";
         $result = true;
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param($paramType, ...$insertData);
-        $stmt->execute();
-        $projectId = $stmt->insert_id;;
-        $stmt->close();
-
-        if (sizeof($_POST['Team']) > 0) {
-            $project_emp_table = new ProjectEmpModel($this->conn);            
-            $emp_add = $project_emp_table->insertByUserIdAndProjectId($_POST['Team'], $projectId);
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param($paramType, ...$insertData);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
         }
-
-
+        $stmt->close();
         if(!$result) {
             return 'error';
         }
+        return 'success';
+    }
+
+    public function insertByUserIdAndProjectId($userIds, $projectId) {
+        $query = "INSERT INTO {$this->table} (ProjectId, UserId, CreatedAt) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $d = Date('Y-m-d');
+
+        foreach ($userIds as $user) {
+            $stmt->bind_param('iis', $projectId, $user, $d);
+            $stmt->execute();
+        }
+        $stmt->close();
+
         return 'success';
     }
 };

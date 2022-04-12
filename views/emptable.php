@@ -4,10 +4,32 @@
 
   $userModel = new UserModel($conn);
 
+  $userRemoved = false;
+  $error = false;
+  if(isset($_GET['remove'])) {
+    $result = $userModel->removeById($_GET['remove']);
+    if($result == 'deleted') {
+      $userRemoved = true;
+    } else {
+      $error = true;
+    }
+  }
+  
   $rows = $userModel->findAll();
 ?>
 <h2 class="ps-2">All Staff</h2>
 <hr>
+<?php if($userRemoved): ?>
+<div class="alert alert-success alert-dismissible" role="alert">
+  User removed succesfully!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php elseif($error): ?>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  Error while processing the request!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php endif; ?>
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
   <table class="table table-hover border-top text-center" id="emptable">
     <thead>
@@ -48,7 +70,9 @@
               <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uModal" onclick="setModal(<?= $row['Id'] ?>)"><i class="bx bx-detail me-2"></i>Details</button>
               <?php if($row['DeletedAt'] == null): ?>
               <a class="dropdown-item" href="/addStaff.php?edit=<?= $row['Id'] ?>"><i class="bx bx-edit-alt me-2"></i>Edit</a>
-              <button class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i>Delete</button>
+              <button class="dropdown-item" onclick="removeDept(<?= $row['Id'] ?>)">
+                <i class="bx bx-trash me-2"></i>Delete
+              </button>
               <?php endif; ?>
             </div>
           </div>
@@ -145,5 +169,12 @@ $details = [
     for(let i=0; i<details.length; i++) {
       document.getElementById('U-'+details[i]).innerText = data[details[i]];
     }
+  }
+
+  function removeDept(id) {
+    if (!confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+    window.location = '/viewStaff.php?remove=' + id;
   }
 </script>

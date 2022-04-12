@@ -1,9 +1,12 @@
 <?php
 require_once "../models/users.php";
+require_once "../models/clients.php";
 require_once "../models/projects.php";
 require_once "../config/dbconfig.php";
 $userModel = new UserModel($conn);
-$users = $userModel->findAll();
+$clientModel = new ClientModel($conn);
+$users = $userModel->findAllActive();
+$clients = $clientModel->findAllActive();
 
 $projectAdded = false;
 $duplicate = false;
@@ -61,7 +64,11 @@ if (isset($_POST['submitProject'])) {
             </div>
             <div class="mb-3">
                 <label for="client-input" class="col-form-label">Client <span class="text-muted">(Optional)</span></label>
-                <input name="ClientId" class="form-control" value="" type="number" placeholder="Enter client here" id="client-input" />
+                <select name="ClientId" class="select2 form-control" multiple="multiple" id="client-input">
+                <?php foreach($clients as $client): ?>
+                    <option value="<?= $client['Id'] ?>"><?= $client['Name'] ?></option>
+                <?php endforeach; ?>
+                </select>
             </div>
             <div class="mb-3 row">
                 <div class="col-12 col-md-6">
@@ -92,7 +99,6 @@ if (isset($_POST['submitProject'])) {
                     <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
                 <?php endforeach; ?>
                 </select>
-                
             </div>
             <div class="d-flex flex-row-reverse">
                 <button type="submit" name="submitProject" value="submit" class="btn rounded-pill me-2 btn-primary">Submit</button>

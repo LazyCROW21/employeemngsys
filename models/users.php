@@ -221,4 +221,23 @@ class UserModel {
         return 'success';
     }
 
+    function removeById($id) {
+        $currDate = Date('Y-m-d H:i:s');
+
+        $query = "UPDATE {$this->table} SET {$this->deletedAt['name']} = '$currDate'";
+        $query .= " WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'deleted';
+    }
 };

@@ -9,7 +9,6 @@ $error = false;
 $editFlag = false;
 $userUpdate = false;
 $editUser = array();
-$editPk = "";
 
 $deptModel = new DeptModel($conn);
 $desgModel = new DesgModel($conn);
@@ -67,9 +66,9 @@ if (isset($_GET['edit'])) {
 
 ?>
 <?php if($editFlag): ?>
-    <h2 class="ps-2">Edit Staff</h2>
+<h2 class="ps-2">Edit Staff</h2>
 <?php else: ?>
-    <h2 class="ps-2">Add Staff</h2>
+<h2 class="ps-2">Add Staff</h2>
 <?php endif; ?>
 <hr>
 <?php if($userAdded): ?>

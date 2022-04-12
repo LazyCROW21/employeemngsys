@@ -60,40 +60,86 @@
         <!-- Content wrapper -->
         <div class="content-wrapper">
           <!-- Content -->
+        <?php 
+          require_once "../config/dbconfig.php";
+          require_once "../models/clients.php";
+          require_once "../models/departments.php";
+          require_once "../models/designations.php";
+          require_once "../models/leaves.php";
+          require_once "../models/payrolls.php";
+          require_once "../models/permissions.php";
+          require_once "../models/projects.php";
+          require_once "../models/users.php";
+
+          $clientModel = new ClientModel($conn);
+          $deptModel = new DeptModel($conn);
+          $desgModel = new DesgModel($conn);
+          $leaveModel = new LeaveModel($conn);
+          $projectModel = new ProjectModel($conn);
+          $userModel = new UserModel($conn);
+        ?>
+
           <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row">
               <div class="col-6 my-1">
                 <div class="card border border-primary border-2">
                   <div class="card-body">
-                    Active Employees <span class="badge bg-primary">4</span>
+                    Active Employees <span class="badge bg-primary"><?= $userModel->findAllActive()->num_rows ?></span>
                   </div>
                 </div>
               </div>
               <div class="col-6 my-1">
                 <div class="card border border-success border-2">
                   <div class="card-body">
-                    Active Departments <span class="badge bg-success">4</span>
+                    Active Departments <span class="badge bg-success"><?= $deptModel->findAllActive()->num_rows ?></span>
                   </div>
                 </div>
               </div>
               <div class="col-6 my-1">
                 <div class="card border border-info border-2">
                   <div class="card-body">
-                    Active Designations <span class="badge bg-info">4</span>
+                    Active Designations <span class="badge bg-info"><?= $desgModel->findAllActive()->num_rows ?></span>
                   </div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="card my-1 border border-warning border-2">
                   <div class="card-body">
-                    New Leave Requests <span class="badge bg-warning">4</span>
+                    New Leave Requests <span class="badge bg-warning"><?= $leaveModel->findPendingLeaves()->num_rows ?></span>
                   </div>
                 </div>
               </div>
               <div class="col-6 my-1">
                 <div class="card border border-dark border-2">
                   <div class="card-body">
-                    Active Clients <span class="badge bg-dark">4</span>
+                    Active Clients <span class="badge bg-dark"><?= $clientModel->findAllActive()->num_rows ?></span>
+                  </div>
+                </div>
+              </div>
+              <?php
+                $allProjects = $projectModel->findAll();
+                $active = 0;
+                $late = 0;
+                $currDate = Date('Y-m-d');
+                foreach($allProjects as $project) {
+                  if($project['Completed']) continue;
+                  $active++;
+                  if(isset($project['Deadline']) && $project['Deadline'] < $currDate) {
+                    $late++;
+                  }
+                }
+              ?>
+              <div class="col-6 my-1">
+                <div class="card border border-secondary border-2">
+                  <div class="card-body">
+                    Active Projects <span class="badge bg-secondary"><?= $active ?></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 my-1">
+                <div class="card border border-danger border-2">
+                  <div class="card-body">
+                    Late Projects <span class="badge bg-danger"><?= $late ?></span>
                   </div>
                 </div>
               </div>

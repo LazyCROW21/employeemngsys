@@ -3,6 +3,26 @@ require_once "../models/projects.php";
 require_once "../config/dbconfig.php";
 
 $projModel = new ProjectModel($conn);
+$dropError = false;
+$dropSuccess = false;
+$completeError = false;
+$completeSuccess = false;
+
+if(isset($_GET['drop'])) {
+    $result = $projModel->markDropped($_GET['drop']);
+    if($result == 'success') {
+        $dropSuccess = true;
+    } else {
+        $dropError = true;
+    }
+} else if(isset($_GET['complete'])) {
+    $result = $projModel->markComplete($_GET['complete']);
+    if($result == 'success') {
+        $completeSuccess = true;
+    } else {
+        $completeError = true;
+    }
+}
 
 $rows = $projModel->findAll();
 ?>
@@ -10,6 +30,22 @@ $rows = $projModel->findAll();
 <h2 class="ps-2">All Projects</h2>
 <hr>
 <!-- table-responsive -->
+<?php if($dropSuccess): ?>
+<div class="alert alert-success alert-dismissible" role="alert">
+  Project removed succesfully!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php elseif($completeSuccess): ?>
+<div class="alert alert-success alert-dismissible" role="alert">
+    Project marked complete!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php elseif($dropError || $completeError): ?>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  Error while processing the request!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php endif; ?>
 <div class="pt-0" style="overflow-x: auto; overflow-y: visible;">
     <table class="table table-hover border-top text-center" id="projecttable">
         <thead>
@@ -38,10 +74,12 @@ $rows = $projModel->findAll();
                 <td>
                     <?php if ($row['Completed']) : ?>
                     <span class="badge bg-label-success me-1">Completed</span>
+                    <?php elseif (isset($row['DeletedAt'])) : ?>
+                    <span class="badge bg-label-secondary me-1">Dropped</span>
                     <?php elseif (!$row['Deadline']) : ?>
                     <span class="badge bg-label-primary me-1">Active</span>
                     <?php elseif ($currentDate < $row['StartedAt']) : ?>
-                    <span class="badge bg-label-secondary me-1">Scheduled</span>
+                    <span class="badge bg-label-info me-1">Scheduled</span>
                     <?php elseif ($currentDate > $row['Deadline']) : ?>
                     <span class="badge bg-label-danger me-1">Late</span>
                     <?php else : ?>
@@ -61,9 +99,6 @@ $rows = $projModel->findAll();
                             <a class="dropdown-item" href="/addProject.php?edit=<?= $row['Id'] ?>">
                                 <i class="bx bx-edit-alt me-2"></i>Edit
                             </a>
-                            <button class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-2"></i>Delete
-                            </button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -89,7 +124,8 @@ $rows = $projModel->findAll();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                <a id="mEdit" class="btn btn-primary" href="#">Edit</a>
+                <a id="mDrop" class="btn link-danger" href="#">Drop</a>
+                <a id="mComplete" class="btn link-success" href="#">Complete</a>
             </div>
         </div>
     </div>
@@ -100,7 +136,8 @@ $rows = $projModel->findAll();
         var row = document.getElementById('pr-' + id);
         var data = JSON.parse(row.getAttribute('data-project'));
         var tablebody = document.getElementById('mtbody');
-        document.getElementById('mEdit').href = '/addProject.php?edit='+id;
+        document.getElementById('mDrop').href = '/viewProjects.php?drop='+id;
+        document.getElementById('mComplete').href = '/viewProjects.php?complete='+id;
         tablebody.innerHTML = '';
         for (const key in data) {
             tablebody.innerHTML += `<tr><td class="text-end fw-semibold">${key}</td><td>${data[key]}</td></tr>`;

@@ -13,7 +13,7 @@ class ProjectModel {
         [ 'name' => 'Description', 'type' => 's', 'required' => true ],
         [ 'name' => 'Earning', 'type' => 'd', 'required' => false ],
         [ 'name' => 'Deadline', 'type' => 's', 'required' => false ],
-        [ 'name' => 'StartedAt', 'type' => 's', 'required' => false ],
+        [ 'name' => 'StartedAt', 'type' => 's', 'required' => true ],
         [ 'name' => 'Completed', 'type' => 'i', 'required' => true ],
     ];
     
@@ -93,6 +93,47 @@ class ProjectModel {
         }
 
 
+        if(!$result) {
+            return 'error';
+        }
+        return 'success';
+    }
+
+    public function markComplete($id) {
+        $query = "UPDATE {$this->table} SET Completed = 1 WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
+        }
+        $stmt->close();
+        if(!$result) {
+            return 'error';
+        }
+        return 'success';
+    }
+
+    public function markDropped($id) {
+        $currDate = Date('Y-m-d H:i:s');
+        $query = "UPDATE {$this->table} SET {$this->deletedAt['name']} = '$currDate' WHERE {$this->primaryKey['name']} = ?";
+        $result = true;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $result = $stmt->execute();
+        } catch (Exception $e)  {
+            if($this->conn->errno == 1062) {
+                return 'duplicate';
+            }
+            return 'error';
+        }
+        $stmt->close();
         if(!$result) {
             return 'error';
         }

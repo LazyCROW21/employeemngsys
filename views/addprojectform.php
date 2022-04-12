@@ -15,11 +15,13 @@ $projectModel = new ProjectModel($conn);
 
 if (isset($_POST['submitProject'])) {
     if(
-        !isset($_POST['Title']) || !isset($_POST['Description']) || !isset($_POST['LeadId'])
+        !isset($_POST['Title']) || !isset($_POST['Description']) ||
+        !isset($_POST['LeadId']) || !isset($_POST['StartedAt'])
     ) {
         exit("invalid input");
     }
     $_POST['Completed'] = 0;
+    $_POST['Dropped'] = 0;
     $_POST['CreatedBy'] = $_SESSION['UserId'];
     $result = $projectModel->insert($_POST);
     if($result == 'success'){
@@ -72,8 +74,8 @@ if (isset($_POST['submitProject'])) {
             </div>
             <div class="mb-3 row">
                 <div class="col-12 col-md-6">
-                    <label for="sdate-input" class="col-form-label">Starting date <span class="text-muted">(Optional)</span></label>
-                    <input name="StartedAt" class="form-control" type="date" value="" id="sdate-input"/>
+                    <label for="sdate-input" class="col-form-label">Starting date</label>
+                    <input name="StartedAt" class="form-control" type="date" value="" id="sdate-input" required />
                 </div>
                 <div class="col-12 col-md-6">
                     <label for="dline-input" class="col-form-label">Deadline <span class="text-muted">(Optional)</span></label>

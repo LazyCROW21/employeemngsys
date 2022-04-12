@@ -1,111 +1,141 @@
 <?php require_once '../config/checksession.php'; ?>
 <!DOCTYPE html>
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="/assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="/assets/"
+  data-template="vertical-menu-template-free">
 
-    <title>Dashboard</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <meta name="description" content="Employee management system" />
+  <title>Dashboard</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+  <meta name="description" content="Employee management system" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="/assets/css/demo.css" />
+  <!-- Icons. Uncomment required icon fonts -->
+  <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="/assets/css/demo.css" />
 
-    <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <!-- Page CSS -->
+  <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
 
-    <!-- Helpers -->
-    <script src="/assets/vendor/js/helpers.js"></script>
+  <!-- Page CSS -->
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="/assets/js/config.js"></script>
-  </head>
+  <!-- Helpers -->
+  <script src="/assets/vendor/js/helpers.js"></script>
 
-  <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
-        <?php require_once "../views/sidebar.php" ?>
-        <!-- / Menu -->
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="/assets/js/config.js"></script>
+</head>
 
-        <!-- Layout container -->
-        <div class="layout-page">
-          <?php require_once "../views/navbar.php"; ?>
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      <?php require_once "../views/sidebar.php" ?>
+      <!-- / Menu -->
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
-            <div class="container-xxl flex-grow-1 container-p-y">
+      <!-- Layout container -->
+      <div class="layout-page">
+        <?php require_once "../views/navbar.php"; ?>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row">
+              <div class="col-6 my-1">
+                <div class="card border border-primary border-2">
+                  <div class="card-body">
+                    Active Employees <span class="badge bg-primary">4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 my-1">
+                <div class="card border border-success border-2">
+                  <div class="card-body">
+                    Active Departments <span class="badge bg-success">4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 my-1">
+                <div class="card border border-info border-2">
+                  <div class="card-body">
+                    Active Designations <span class="badge bg-info">4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card my-1 border border-warning border-2">
+                  <div class="card-body">
+                    New Leave Requests <span class="badge bg-warning">4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 my-1">
+                <div class="card border border-dark border-2">
+                  <div class="card-body">
+                    Active Clients <span class="badge bg-dark">4</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <!-- / Content -->
-
-            <?php require_once "../views/footer.php"; ?>
-
-            <div class="content-backdrop fade"></div>
           </div>
-          <!-- Content wrapper -->
+          <!-- / Content -->
+
+          <?php require_once "../views/footer.php"; ?>
+
+          <div class="content-backdrop fade"></div>
         </div>
-        <!-- / Layout page -->
+        <!-- Content wrapper -->
       </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
+      <!-- / Layout page -->
     </div>
-    <!-- / Layout wrapper -->
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
 
-    <script src="/assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/assets/vendor/js/bootstrap.js"></script>
+  <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
 
-    <!-- Main JS -->
-    <script src="/assets/js/main.js"></script>
+  <!-- Vendors JS -->
+  <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
-    <!-- Page JS -->
-    <script src="/assets/js/dashboards-analytics.js"></script>
+  <!-- Main JS -->
+  <script src="/assets/js/main.js"></script>
 
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+  <!-- Page JS -->
+  <script src="/assets/js/dashboards-analytics.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
 </html>

@@ -1,8 +1,10 @@
 <?php
 require_once "../models/projects.php";
+require_once "../models/projectEmp.php";
 require_once "../config/dbconfig.php";
 
 $projModel = new ProjectModel($conn);
+$peModel = new ProjectEmpModel($conn);
 $dropError = false;
 $dropSuccess = false;
 $completeError = false;
@@ -65,7 +67,18 @@ $rows = $projModel->findAll();
             $currentDate = Date('Y-m-d');
             ?>
             <?php foreach ($rows as $row) : ?>
-            <tr id="pr-<?= $row['Id'] ?>" data-project="<?= htmlentities(json_encode($row)) ?>">
+            <?php
+                $team = $peModel->findTeam($row['Id']); 
+                $teamArr = array();
+                foreach ($team as $member) {
+                    array_push($teamArr, $member);
+                }
+            ?>
+            <tr 
+                id="pr-<?= $row['Id'] ?>" 
+                data-project="<?= htmlentities(json_encode($row)) ?>" 
+                data-team="<?= htmlentities(json_encode($teamArr)) ?>"
+            >
                 <td><?= $count++ ?></td>
                 <td class="text-start"><?= $row['Title'] ?></td>
                 <td class="text-start"><?= $row['ClientId'] ?></td>
@@ -119,7 +132,12 @@ $rows = $projModel->findAll();
             </div>
             <div class="modal-body">
                 <table class="table">
-                    <tbody id="mtbody"></tbody>
+                    <tbody id="mtbody-P"></tbody>
+                </table>
+                <div class="divider"><div class="divider-text">Team</div></div>
+                <table class="table">
+                    <thead id="mthead-T"></thead>
+                    <tbody id="mtbody-T"></tbody>
                 </table>
             </div>
             <div class="modal-footer">
@@ -133,14 +151,39 @@ $rows = $projModel->findAll();
 
 <script>
     function setModal(id) {
+        // for project
         var row = document.getElementById('pr-' + id);
         var data = JSON.parse(row.getAttribute('data-project'));
-        var tablebody = document.getElementById('mtbody');
+        var tablebodyP = document.getElementById('mtbody-P');
         document.getElementById('mDrop').href = '/viewProjects.php?drop='+id;
         document.getElementById('mComplete').href = '/viewProjects.php?complete='+id;
-        tablebody.innerHTML = '';
+        tablebodyP.innerHTML = '';
         for (const key in data) {
-            tablebody.innerHTML += `<tr><td class="text-end fw-semibold">${key}</td><td>${data[key]}</td></tr>`;
+            tablebodyP.innerHTML += `<tr><td class="text-end fw-semibold">${key}</td><td>${data[key]}</td></tr>`;
         }
+
+        // for team
+        var teamdata = JSON.parse(row.getAttribute('data-team'));
+        var tablebodyT = document.getElementById('mtbody-T');
+        var tableheadT = document.getElementById('mthead-T');
+        var theadT = '';
+        if(teamdata.length != 0) {
+            theadT = '<tr><th>#</th>';
+            for(const key in teamdata[0]) {
+                theadT += `<th>${key}</th>`;
+            }
+            theadT += '</tr>';
+        }
+        tableheadT.innerHTML = theadT;
+        var teamHTML = ''
+        for (let i = 0; i < teamdata.length; i++) {
+            let trStr = '<tr><td>'+(i+1)+'</td>';
+            for(const key in teamdata[i]) {
+                trStr += `<td>${teamdata[i][key]}</td>`;
+            }
+            trStr += '</tr>';
+            teamHTML += trStr;
+        }
+        tablebodyT.innerHTML = teamHTML;
     }
 </script>

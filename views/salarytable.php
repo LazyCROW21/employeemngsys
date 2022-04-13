@@ -34,7 +34,7 @@ function getPay($data) {
     return $pay;
 }
 
-$rows = $prModel->findAll();
+$rows = $prModel->findByUserId($_SESSION['UserId']);
 ?>
 
 <h2 class="ps-2">Payment History</h2>
@@ -72,9 +72,7 @@ $rows = $prModel->findAll();
                         <div class="action-btn dropdown dropstart">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-detail me-2"></i>Details</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-2"></i>Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-2"></i>Delete</a>
+                                <a class="dropdown-item" target="_blank" href="/viewPaySlip.php?Id=<?= $row['Id'] ?>"><i class="bx bx-printer me-2"></i>Print</a>
                             </div>
                         </div>
                     </td>

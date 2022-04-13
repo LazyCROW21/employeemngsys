@@ -45,6 +45,7 @@ if (isset($_POST['submitPayroll'])) {
     ) {
         exit("invalid input");
     }
+    
     $_POST['GrantedBy'] = $_SESSION['UserId'];
     $prModel = new PRModel($conn);
     $result = $prModel->insert($_POST);
@@ -251,7 +252,6 @@ if (isset($_POST['submitPayroll'])) {
     <div class="d-flex flex-row-reverse">
         <button type="submit" name="submitPayroll" value="submit"
             class="btn rounded-pill me-2 btn-primary">Submit</button>
-        <button type="button" class="btn rounded-pill me-2 btn-secondary">Print</button>
     </div>
 </form>
 

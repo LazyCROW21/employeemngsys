@@ -28,7 +28,7 @@ class PRModel {
         [ 'name' => 'Year', 'type' => 'i', 'required' => true ],
     ];
     
-    private $grandedBy = [ 'name' => 'GrantedBy', 'type' => 'i', 'required' => true ];
+    private $grantedBy = [ 'name' => 'GrantedBy', 'type' => 'i', 'required' => true ];
     private $createdAt = [ 'name' => 'CreatedAt', 'type' => 's', 'required' => false ];
     private $updatedAt = [ 'name' => 'UpdatedAt', 'type' => 's', 'required' => false ];
     private $deletedAt = [ 'name' => 'DeletedAt', 'type' => 's', 'required' => false ];
@@ -40,6 +40,40 @@ class PRModel {
     public function findAll() {
         $sql = "SELECT * FROM {$this->table}";
         return $this->conn->query($sql);
+    }
+
+    public function findById($id) {
+        $query = "SELECT * FROM {$this->table} WHERE {$this->primaryKey['name']} = ?";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            if($result->num_rows == 1) {
+                $data = $result->fetch_assoc();
+            }
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
+    }
+
+    public function findByUserId($id) {
+        $query = "SELECT * FROM {$this->table} WHERE UserId = ?";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $data = $result;
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
     }
 
     public function insert($data)
@@ -63,11 +97,11 @@ class PRModel {
             }
         }
         
-        if($this->grandedBy) {
-            $columnList .= $this->grandedBy['name'].',';
+        if($this->grantedBy) {
+            $columnList .= $this->grantedBy['name'].',';
             $params .= '?,';
-            $paramType .= $this->grandedBy['type'];
-            array_push($insertData, 1);
+            $paramType .= $this->grantedBy['type'];
+            array_push($insertData, $data[$this->grantedBy['name']]);
         }
 
         if($this->createdAt) {

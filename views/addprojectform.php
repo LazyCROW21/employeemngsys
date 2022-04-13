@@ -90,7 +90,7 @@ if (isset($_POST['submitProject'])) {
                 <label for="name-input" class="col-form-label">Select Lead</label>
                 <select name="LeadId" class="select2 form-control" required>
                 <?php foreach($users as $user): ?>
-                    <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
+                    <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?> (<?= $user['DesignationName'] ?>,<?= $user['DepartmentName'] ?>)</option>
                 <?php endforeach; ?>
                 </select>
             </div>
@@ -98,7 +98,7 @@ if (isset($_POST['submitProject'])) {
                 <label for="name-input" class="col-form-label">Select Team <span class="text-muted">(Optional)</span></label>
                 <select name="Team[]" class="select2 form-control" multiple="multiple">
                 <?php foreach($users as $user): ?>
-                    <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?></option>
+                    <option value="<?= $user['Id'] ?>"><?= $user['Name'] ?> (<?= $user['DesignationName'] ?>,<?= $user['DepartmentName'] ?>)</option>
                 <?php endforeach; ?>
                 </select>
             </div>

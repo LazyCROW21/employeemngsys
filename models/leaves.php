@@ -43,8 +43,19 @@ class LeaveModel {
     }
 
     public function findPastLeavesByUserId($userId) {
-        $sql = "SELECT L.Id AS Id, L.StartedAt AS StartedAt, L.StartHalf AS StartHalf, L.EndHalf AS EndHalf, L.EndedAt AS EndedAt, L.LeaveType AS LeaveType, L.EffectOnPay AS EffectOnPay, L.Reason AS Reason, L.Status AS Status, L.RespondedBy AS RespondedBy, L.RespondedAt AS RespondedAt, L.CreatedAt AS CreatedAt, U.Name AS RespondedByName FROM {$this->table} L JOIN user U ON U.Id = L.RespondedBy";
-        return $this->conn->query($sql);
+        $query = "SELECT L.Id AS Id, L.StartedAt AS StartedAt, L.StartHalf AS StartHalf, L.EndHalf AS EndHalf, L.EndedAt AS EndedAt, L.LeaveType AS LeaveType, L.EffectOnPay AS EffectOnPay, L.Reason AS Reason, L.Status AS Status, L.RespondedBy AS RespondedBy, L.RespondedAt AS RespondedAt, L.CreatedAt AS CreatedAt, U.Name AS RespondedByName FROM {$this->table} L JOIN user U ON U.Id = L.RespondedBy WHERE L.UserId = ?";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $data = $result;
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
     }
 
     public function insert($data)

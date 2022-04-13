@@ -22,6 +22,27 @@ class ProjectEmpModel {
         return $this->conn->query($sql);
     }
 
+    public function findTeam($projectId) {
+        $query = "SELECT PR.UserId AS UserId, U.Name AS UserName, DP.Name AS Department, DG.Name AS Designation";
+        $query .= " FROM {$this->table} PR";
+        $query .= " INNER JOIN user U ON U.Id = PR.UserId";
+        $query .= " INNER JOIN department DP ON DP.Id = U.DepartmentId";
+        $query .= " INNER JOIN designation DG ON DG.Id = U.DesignationId";
+        $query .= " WHERE ProjectId = ?";
+        $data = false;
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $projectId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            $data = $result;
+        } catch (Exception $e)  {
+            $data = false;
+        }
+        return $data;
+    }
+
     public function insert($data)
     {
         $columnList = '(';

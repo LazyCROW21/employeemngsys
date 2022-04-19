@@ -44,8 +44,8 @@ if (isset($_POST['submitUser'])) {
             }
         }
         else {
-            $result = $userModel->insert($_POST);
             $_POST['CreatedBy'] = $_SESSION['UserId'];
+            $result = $userModel->insert($_POST);
             if($result == 'success'){
                 $userAdded = true;
             } 
